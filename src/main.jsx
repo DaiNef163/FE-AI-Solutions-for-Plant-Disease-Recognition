@@ -7,6 +7,7 @@ import Register from "./pages/register.jsx";
 import UserPage from "./pages/users.jsx";
 import HomePage from "./pages/home.jsx";
 import LoginPage from "./pages/login.jsx";
+import Footer from "./components/layout/footer.jsx"
 import { AuthWrapper } from "./components/context/auth.context.jsx";
 // import './index.css'
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage></LoginPage>,
+  },
+  {
+    path: "/ft",
+    element: <Footer></Footer>,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

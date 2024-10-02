@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "./util/axios.customize";
 import Header from "./components/layout/header";
+import Footer from "./components/layout/footer";
 import { Outlet } from "react-router-dom";
 import { authContext } from "./components/context/auth.context";
 // import axios from "axios";
@@ -43,6 +44,8 @@ function App() {
         <>
           <Header></Header>
           <Outlet></Outlet>
+          <Footer></Footer>
+          
         </>
       )}
     </div>
