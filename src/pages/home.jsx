@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "../index.css";
-import { Image } from "antd";
+import { Carousel, Image } from "antd";
 export const HomePage = () => {
   return (
     <div className="p-1">
@@ -50,6 +50,28 @@ export const HomePage = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="  h-4/5 w-4/5 flex justify-center  items-center mx-auto">
+        <div className="h-full w-full items-center ">
+          <Carousel autoplay autoplaySpeed={2000}>
+            <img
+              src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80"
+              alt="image 1"
+              className="h-full w-full object-cover"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80"
+              alt="image 1"
+              className="h-full w-full object-cover"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2560&q=80"
+              alt="image 1"
+              className="h-full w-full object-cover"
+            />
+          
+          </Carousel>
         </div>
       </div>
     </div>

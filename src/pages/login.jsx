@@ -1,43 +1,42 @@
 import React, { useContext } from "react";
-import { Button, Checkbox, Col, Divider, Form, Input, notification, Row } from "antd";
-import { createUserApi, loginApi } from "../util/api";
+import { Button, Col, Divider, Form, Input, notification, Row } from "antd";
+import { loginApi } from "../util/api";
 import { Link, useNavigate } from "react-router-dom";
-import { authContext } from "../components/context/auth.context";
-import { ArrowLeftOutlined } from '@ant-design/icons';
-const LoginPage = () => {
+import { UserContext } from "../components/context/auth.context"; // Import đúng UserContext
+import { ArrowLeftOutlined } from "@ant-design/icons";
+
+const LoginPage = (ev) => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(authContext);
+  const { setUser, setIsAuthenticated } = useContext(UserContext); // Lấy setUser và setIsAuthenticated từ context
+
   const onFinish = async (values) => {
     const { email, password } = values;
-    const res = await loginApi(email, password);
-    console.log(res.data.EC);
-
-    if (res && res.data.EC === 0) {
-      console.log(res);
-
-      localStorage.setItem("access_token", res.data.access_token);
-      notification.success({
-        message: "LOGIN USER",
-        description: "Success",
-      });
-      localStorage.email = res.data?.user?.email || "";
-      localStorage.name = res.data?.user?.name || "";
-      setAuth({
-        isAuthenticated: true,
-        user: {
-          email: res.data?.user?.email ?? "",
-          name: res.data?.user?.name ?? "",
-        },
-      });
-      navigate("/");
-    } else {
+    try {
+      const res = await loginApi(email, password);
+      if (res && res.data.EC === 0) {
+        localStorage.setItem("access_token", res.data.access_token);
+        setUser(res.data.user); // Cập nhật user
+        setIsAuthenticated(true); // Đánh dấu người dùng đã xác thực
+        notification.success({
+          message: "LOGIN USER",
+          description: "Success",
+        });
+        navigate("/");
+      } else {
+        notification.error({
+          message: "LOGIN USER",
+          description: res?.EM ?? "error",
+        });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       notification.error({
         message: "LOGIN USER",
-        description: res?.EM ?? "error",
+        description: "An error occurred during login.",
       });
     }
-    console.log("check res", res);
   };
+
   return (
     <Row justify={"center"} style={{ marginTop: "30px" }}>
       <Col xs={24} md={16} lg={8}>
@@ -62,38 +61,44 @@ const LoginPage = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your email!",
+                  message: "Vui lòng nhập email!",
                 },
+                { type: "email", message: "ui lòng nhập đúng định dạng email!" },
               ]}
             >
               <Input />
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label="Mật khẩu"
               name="password"
               rules={[
                 {
                   required: true,
-                  message: "Please input your password!",
+                  message: "Vui lòng nhập mật khẩu!",
                 },
               ]}
             >
               <Input.Password />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item className="flex justify-center items-center">
               <Button type="primary" htmlType="submit">
-                Login
+                Đăng nhập
               </Button>
             </Form.Item>
           </Form>
-          <Link to={"/"}>
+          <Link className="flex justify-center items-center" to={"/"}>
             <ArrowLeftOutlined /> Quay lại trang chủ
           </Link>
           <Divider />
-          <div style={{ textAlign: "center" }}>
-            Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
+          <div className="flex justify-around">
+            <div>
+              Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
+            </div>
+            <div>
+              <Link to={"/register"}>Quên mật khẩu</Link>
+            </div>
           </div>
         </fieldset>
       </Col>

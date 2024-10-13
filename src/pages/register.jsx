@@ -1,7 +1,17 @@
 import React from "react";
-import { Button, Checkbox, Form, Input, notification } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Divider,
+  Form,
+  Input,
+  notification,
+  Row,
+} from "antd";
 import { createUserApi } from "../util/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -13,8 +23,8 @@ const Register = () => {
         message: "CREATE USER",
         description: "Success",
       });
-      navigate("/login")
-    }else{
+      navigate("/login");
+    } else {
       notification.error({
         message: "CREATE USER",
         description: "ERROR",
@@ -25,79 +35,79 @@ const Register = () => {
   };
 
   return (
-    <div style={{ margin: 50 }}>
-      <Form
-        name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        style={{
-          maxWidth: 600,
-        }}
-        onFinish={onFinish}
-        autoComplete="off"
-      >
-        <Form.Item
-          label="email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: "Please input your name!",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
+    <Row justify={"center"} style={{ marginTop: "30px" }}>
+      <Col xs={24} md={16} lg={8}>
+        <fieldset
+          style={{
+            padding: "15px",
+            margin: "5px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
           }}
         >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+          <legend>Đăng Ký</legend>
+          <Form
+            name="basic"
+            onFinish={onFinish}
+            autoComplete="off"
+            layout="vertical"
+          >
+            <Form.Item
+              label="Họ tên"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Nhập đầy đủ họ tên",
+                },
+                { type: "text", message: "Vui lòng nhập đúng kí tự" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập email!",
+                },
+                { type: "email", message: "Vui lòng nhập đúng định dạng email!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item className="flex justify-center items-center">
+              <Button type="primary" htmlType="submit">
+                Đăng ký
+              </Button>
+            </Form.Item>
+          </Form>
+          <Link className="flex justify-center items-center" to={"/"}>
+            <ArrowLeftOutlined /> Quay lại trang chủ
+          </Link>
+          <Divider />
+          <div style={{ textAlign: "center" }}>
+            Bạn đã có tài khoản ? <Link to={"/login"}>Đăng nhập tại đây</Link>
+          </div>
+        </fieldset>
+      </Col>
+    </Row>
   );
 };
 export default Register;
