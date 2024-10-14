@@ -1,4 +1,4 @@
-  import axios from "./axios.customize";
+import axios from "./axios.customize";
 
 const createUserApi = (name, email, password) => {
   const URL_API = "/v1/api/register";
@@ -21,6 +21,12 @@ const getUserApi = () => {
   const URL_API = "/v1/api/user";
   return axios.get(URL_API);
 };
-const test = () => {};
+const forgotPassword = () => {
+  const URL_API = "/v1/api/admin/password/forgot";
+  const data = {
+    email,
+  };
+  return axios.post(URL_API, data);
+};
 
-export { createUserApi, loginApi, getUserApi,test };
+export { createUserApi, loginApi, getUserApi, forgotPassword };

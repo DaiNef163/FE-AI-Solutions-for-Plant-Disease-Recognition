@@ -5,11 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../components/context/auth.context"; // Import đúng UserContext
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
-const LoginPage = (ev) => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser, setIsAuthenticated } = useContext(UserContext); // Lấy setUser và setIsAuthenticated từ context
 
   const onFinish = async (values) => {
+    // values.preventDefault();
     const { email, password } = values;
     try {
       const res = await loginApi(email, password);
@@ -63,7 +64,10 @@ const LoginPage = (ev) => {
                   required: true,
                   message: "Vui lòng nhập email!",
                 },
-                { type: "email", message: "ui lòng nhập đúng định dạng email!" },
+                {
+                  type: "email",
+                  message: "Vui lòng nhập đúng định dạng email!",
+                },
               ]}
             >
               <Input />
@@ -97,7 +101,7 @@ const LoginPage = (ev) => {
               Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
             </div>
             <div>
-              <Link to={"/register"}>Quên mật khẩu</Link>
+              <Link to={"/forgetpassword"}>Quên mật khẩu</Link>
             </div>
           </div>
         </fieldset>

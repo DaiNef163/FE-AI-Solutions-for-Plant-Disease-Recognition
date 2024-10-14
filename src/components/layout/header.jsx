@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { BsBag } from "react-icons/bs";
 import { UserContext } from "../context/auth.context";
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import { BiSolidLeaf } from "react-icons/bi";
 const Header = () => {
   const { user, isAuthenticated, setUser, setIsAuthenticated } =
     useContext(UserContext);
-
+  const [isHovered, setIsHovered] = useState(false);
   console.log("User data:", user?.data);
 
   const handleLogout = (ev) => {
@@ -88,9 +88,12 @@ const Header = () => {
               </span>
               {isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
-                  <span className=" rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block">
+                  <Link
+                    
+                    className=" rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
+                  >
                     {user?.email}
-                  </span>
+                  </Link>
                   <span
                     onClick={handleLogout}
                     className="hidden cursor-pointer md:block rounded-md bg-[#2f4550] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#1c2930]"
