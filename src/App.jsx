@@ -10,9 +10,15 @@ import ForgotPassword from "./pages/ForgetPassword"
 import axios from "axios";
 import OTPForm from "./components/otpForgetPassword";
 import ResetPasswordForm from "./components/resetPassword";
+import ProfileUser from "./components/profileUser";
+import Cart from "./components/cart";
+import ContactsPage from "./pages/ContactsPage";
+import NewsPage from "./pages/NewsPage";
+import ShopPage from "./pages/ShopPage";
+import ProductPage from "./pages/ProductPage";
 
 
-axios.defaults.baseURL = "http://localhost:8080/v1/api";
+axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
 
 
@@ -27,6 +33,14 @@ function App() {
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/inputotp" element={<OTPForm />} />
           <Route path="/resetpassword" element={<ResetPasswordForm />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="/profile" element={<ProfileUser/>} />
+          <Route path="/cart" element={<Cart/>} />
+
+
         </Route>
       </Routes>
     </UserContextProvider>

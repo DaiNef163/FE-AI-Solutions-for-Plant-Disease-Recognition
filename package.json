@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "5.3.7",
+    "@headlessui/react": "^2.1.10",
+    "@heroicons/react": "^2.1.5",
     "@material-tailwind/react": "^2.1.10",
     "antd": "5.19.0",
     "axios": "1.7.2",
