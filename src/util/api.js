@@ -1,7 +1,7 @@
 import axios from "./axios.customize";
 
 const createUserApi = (name, email, password) => {
-  const URL_API = "/v1/api/register";
+  const URL_API = "/register";
   const data = {
     name,
     email,
@@ -10,7 +10,7 @@ const createUserApi = (name, email, password) => {
   return axios.post(URL_API, data);
 };
 const loginApi = (email, password) => {
-  const URL_API = "/v1/api/login";
+  const URL_API = "/login";
   const data = {
     email,
     password,
@@ -18,11 +18,11 @@ const loginApi = (email, password) => {
   return axios.post(URL_API, data);
 };
 const getUserApi = () => {
-  const URL_API = "/v1/api/user";
+  const URL_API = "/user";
   return axios.get(URL_API);
 };
 const forgotPassword = () => {
-  const URL_API = "/v1/api/admin/password/forgot";
+  const URL_API = "/password/forgot";
   const data = {
     email,
   };
