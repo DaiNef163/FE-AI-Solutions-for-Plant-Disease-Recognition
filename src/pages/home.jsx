@@ -43,7 +43,7 @@ export const HomePage = () => {
 
                 <Link
                   href="/products"
-                  className="inline-block rounded-md border border-transparent bg-[#2a2e33] px-8 py-3 text-center font-medium text-white hover:bg-[#12171d]"
+                  className="inline-block rounded-md border border-transparent bg-primary px-8 py-3 text-center font-medium text-white hover:bg-[#1d6b3c]"
                 >
                   Trải nghiệm ngay
                 </Link>

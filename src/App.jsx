@@ -16,6 +16,7 @@ import ContactsPage from "./pages/ContactsPage";
 import NewsPage from "./pages/NewsPage";
 import ShopPage from "./pages/ShopPage";
 import ProductPage from "./pages/ProductPage";
+import Example from "./pages/TestPage";
 
 
 axios.defaults.baseURL = "http://localhost:8080/";
@@ -33,7 +34,8 @@ function App() {
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/inputotp" element={<OTPForm />} />
           <Route path="/resetpassword" element={<ResetPasswordForm />} />
-          <Route path="/products" element={<ProductPage />} />
+          {/* <Route path="/products" element={<ProductPage />} /> */}
+          <Route path="/products" element={<Example />} />
           <Route path="/shop" element={<ShopPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/contacts" element={<ContactsPage />} />

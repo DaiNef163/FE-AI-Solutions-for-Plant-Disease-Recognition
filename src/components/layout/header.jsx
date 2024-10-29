@@ -1,22 +1,21 @@
 import { useContext, useState } from "react";
 import { BsBag } from "react-icons/bs";
 import { UserContext } from "../context/auth.context";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiSolidLeaf } from "react-icons/bi";
 
 const Header = () => {
-  const { user, isAuthenticated, setUser, setIsAuthenticated } =
-    useContext(UserContext);
-  const [isHovered, setIsHovered] = useState(false);
-  console.log("User data:", user?.data);
+  const { user, isAuthenticated, setUser, setIsAuthenticated } = useContext(UserContext);
+  const [isCartOpen, setIsCartOpen] = useState(false); 
+  const navigate = useNavigate();
 
   const handleLogout = (ev) => {
     ev.preventDefault();
     localStorage.removeItem("access_token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("name");
+    localStorage.removeItem("user");
     setUser(null);
-    setIsAuthenticated(false); // Đánh dấu người dùng là chưa xác thực
+    setIsAuthenticated(false); 
+    navigate("/"); 
   };
 
   return (
@@ -30,48 +29,43 @@ const Header = () => {
 
           <div className="flex flex-1 items-center justify-end md:justify-between">
             <nav aria-label="Global" className="hidden md:block">
-              <ul className="flex items-center gap-6 text-sm ">
+              <ul className="flex items-center gap-6 text-sm">
                 <li>
                   <Link
-                    className="text-base text-gray-800 transition hover:text-gray-800/75"
+                    className="text-base text-gray-800 transition hover:text-primary hover:text-xl hover:font-bold"
                     to={"/"}
                   >
                     Giới thiệu
                   </Link>
                 </li>
-
-                <li
-                  className="relative"
-                  onMouseEnter={() => setIsHovered(true)}
-                >
+                <li>
                   <Link
-                    to={"/"}
-                    className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer "
+                    to={"/products"}
+                    className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer hover:text-primary hover:text-xl hover:font-bold"
                   >
                     Sản phẩm
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className="text-gray-800 transition hover:text-gray-800/75"
-                    to="/products"
+                    className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                    to="/shop"
                   >
                     Cửa hàng
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className="text-gray-800 transition hover:text-gray-800/75"
-                    to="/products"
+                    className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                    to="/news" 
                   >
                     Tin tức
                   </Link>
                 </li>
-
                 <li>
                   <Link
-                    className="text-gray-800 transition hover:text-gray-800/75 "
-                    to="/contact"
+                    className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                    to="/contacts"
                   >
                     Liên hệ
                   </Link>
@@ -89,14 +83,14 @@ const Header = () => {
               {isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
                   <Link
-                    
-                    className=" rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
+                    to="/profile" 
+                    className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
                   >
-                    {user?.email}
+                    {user?.name || "Người dùng"} 
                   </Link>
                   <span
                     onClick={handleLogout}
-                    className="hidden cursor-pointer md:block rounded-md bg-[#2f4550] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#1c2930]"
+                    className="hidden cursor-pointer md:block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#226f29]"
                   >
                     Đăng xuất
                   </span>
@@ -105,7 +99,7 @@ const Header = () => {
                 <div className="sm:flex sm:gap-4">
                   <Link
                     to="/login"
-                    className="block rounded-md bg-[#2f4550] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#1c2930]"
+                    className="block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#1c2930]"
                   >
                     Đăng nhập
                   </Link>

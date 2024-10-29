@@ -92,8 +92,8 @@ const Register = () => {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item className="flex justify-center items-center">
-              <Button type="primary" htmlType="submit">
+            <Form.Item className="flex justify-center items-center ">
+              <Button className="bg-primary" type="primary" htmlType="submit">
                 Đăng ký
               </Button>
             </Form.Item>

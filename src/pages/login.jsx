@@ -2,38 +2,45 @@ import React, { useContext } from "react";
 import { Button, Col, Divider, Form, Input, notification, Row } from "antd";
 import { loginApi } from "../util/api";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../components/context/auth.context"; // Import đúng UserContext
+import { UserContext } from "../components/context/auth.context";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setUser, setIsAuthenticated } = useContext(UserContext); // Lấy setUser và setIsAuthenticated từ context
+  const { setUser, setIsAuthenticated } = useContext(UserContext);
 
   const onFinish = async (values) => {
-    // values.preventDefault();
     const { email, password } = values;
     try {
       const res = await loginApi(email, password);
-      if (res && res.data.EC === 0) {
-        localStorage.setItem("access_token", res.data.access_token);
-        setUser(res.data.user); // Cập nhật user
-        setIsAuthenticated(true); // Đánh dấu người dùng đã xác thực
+      console.log("API response:", res);
+
+      if (res && res.EC === 0) {
+        localStorage.setItem("access_token", res.access_token);
+        localStorage.setItem("user", JSON.stringify(res.user));
+
+        setUser(res.user);
+        setIsAuthenticated(true);
+
+        console.log("Login successful:", res.user);
         notification.success({
-          message: "LOGIN USER",
-          description: "Success",
+          message: "Đăng nhập thành công",
+          description: `Chào mừng ${res.user.name}!`,
         });
+
         navigate("/");
       } else {
         notification.error({
-          message: "LOGIN USER",
-          description: res?.EM ?? "error",
+          message: "Đăng nhập thất bại",
+          description: res?.EM || "Vui lòng kiểm tra thông tin đăng nhập!",
         });
+        console.error(res?.EM || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
       notification.error({
-        message: "LOGIN USER",
-        description: "An error occurred during login.",
+        message: "Lỗi đăng nhập",
+        description: "Đã có lỗi xảy ra, vui lòng thử lại sau!",
       });
     }
   };
@@ -87,7 +94,7 @@ const LoginPage = () => {
             </Form.Item>
 
             <Form.Item className="flex justify-center items-center">
-              <Button type="primary" htmlType="submit">
+              <Button className="bg-primary" type="primary" htmlType="submit">
                 Đăng nhập
               </Button>
             </Form.Item>
