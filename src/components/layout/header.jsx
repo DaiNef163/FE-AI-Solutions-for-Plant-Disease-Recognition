@@ -6,7 +6,7 @@ import { BiSolidLeaf } from "react-icons/bi";
 
 const Header = () => {
   const { user, isAuthenticated, setUser, setIsAuthenticated } = useContext(UserContext);
-  const [isCartOpen, setIsCartOpen] = useState(false); 
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = (ev) => {
@@ -14,9 +14,12 @@ const Header = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     setUser(null);
-    setIsAuthenticated(false); 
-    navigate("/"); 
+    setIsAuthenticated(false);
+    navigate("/");
   };
+  console.log("check user?.name", user?.name);
+  console.log("check localStorage.getItem(user)", localStorage.getItem("user"));
+  console.log("Stored user:", localStorage.getItem("user"));
 
   return (
     <div className="w-full relative border-b p-1">
@@ -57,7 +60,7 @@ const Header = () => {
                 <li>
                   <Link
                     className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
-                    to="/news" 
+                    to="/news"
                   >
                     Tin tức
                   </Link>
@@ -80,13 +83,14 @@ const Header = () => {
               >
                 <BsBag fontSize={19} />
               </span>
+
               {isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
                   <Link
-                    to="/profile" 
+                    to="/profile"
                     className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
                   >
-                    {user?.name || "Người dùng"} 
+                    {user?.name || "Người dùng"}
                   </Link>
                   <span
                     onClick={handleLogout}

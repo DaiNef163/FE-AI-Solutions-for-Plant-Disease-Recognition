@@ -8,6 +8,7 @@ import {
   Input,
   notification,
   Row,
+  Select,
 } from "antd";
 import { createUserApi } from "../util/api";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,8 +17,8 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 const Register = () => {
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    const { name, email, password } = values;
-    const res = await createUserApi(name, email, password);
+    const { name, email, password,phone,gender } = values;
+    const res = await createUserApi(name, email, password,phone,gender);
     if (res) {
       notification.success({
         message: "CREATE USER",
@@ -26,8 +27,8 @@ const Register = () => {
       navigate("/login");
     } else {
       notification.error({
-        message: "CREATE USER",
-        description: "ERROR",
+        message: "TẠO TÀI KHOẢN KHÔNG THÀNH CÔNG",
+        description: "Email đã tồn tại hoặc không hợp lệ",
       });
     }
 
@@ -91,7 +92,33 @@ const Register = () => {
             >
               <Input.Password />
             </Form.Item>
-
+            <Form.Item
+              label="Số điện thoại"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số điện thoại!",
+                },
+                {
+                  pattern: /^[0-9]{10,11}$/, 
+                  message:
+                    "Số điện thoại không hợp lệ! Vui lòng nhập từ 10 đến 11 chữ số.",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập số điện thoại" />
+            </Form.Item>
+            
+            <Form.Item
+            label="Giới tính"
+            name="gender">
+              <Select>
+                <Select.Option value="male">Nam</Select.Option>
+                <Select.Option value="female">Nữ</Select.Option>
+                <Select.Option value="other">Khác</Select.Option>
+              </Select>
+            </Form.Item>
             <Form.Item className="flex justify-center items-center ">
               <Button className="bg-primary" type="primary" htmlType="submit">
                 Đăng ký

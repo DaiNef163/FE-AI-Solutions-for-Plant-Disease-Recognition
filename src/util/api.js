@@ -1,14 +1,22 @@
 import axios from "./axios.customize";
 
-const createUserApi = (name, email, password) => {
-  const URL_API = "/register";
-  const data = {
-    name,
-    email,
-    password,
-  };
-  return axios.post(URL_API, data);
+const createUserApi = async (name, email, password, phone, gender) => {
+  try {
+    const response = await axios.post('/register', {
+      name,
+      email,
+      password,
+      gender,
+      phone,
+    });
+    console.log("Response từ server:", response.data); // In ra phản hồi để kiểm tra
+    return response.data; 
+  } catch (error) {
+    console.error("Lỗi khi tạo người dùng:", error);
+    return { success: false, message: "Lỗi kết nối với server." }; 
+  }
 };
+
 
 const loginApi = async (email, password) => {
   const URL_API = "/login";
@@ -17,6 +25,7 @@ const loginApi = async (email, password) => {
   try {
     const response = await axios.post(URL_API, data);
     const { access_token, user } = response.data;
+    console.log("Login API Response:", response.data);
 
     localStorage.setItem("access_token", access_token);
     localStorage.setItem("user", JSON.stringify(user));
