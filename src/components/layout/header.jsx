@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiSolidLeaf } from "react-icons/bi";
 
 const Header = () => {
-  const { user, isAuthenticated, setUser, setIsAuthenticated } = useContext(UserContext);
+  const { user, isAuthenticated, setUser, setIsAuthenticated } =
+    useContext(UserContext);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -73,19 +74,37 @@ const Header = () => {
                     Liên hệ
                   </Link>
                 </li>
+                {isAuthenticated && (
+                  <li>
+                    <Link
+                      className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                      to="/"
+                    >
+                      Quản 
+                    </Link>
+                  </li>
+                )}
               </ul>
             </nav>
 
             <div className="flex items-center gap-2">
-              <span
+              {/* <span
                 onClick={() => setIsCartOpen(!isCartOpen)}
                 className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer pr-1"
               >
-                <BsBag fontSize={19} />
-              </span>
+              shopping cart
+                <BsBag fontSize={19}/>
+              </span> */}
 
               {isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
+                  <span
+                    onClick={() => setIsCartOpen(!isCartOpen)}
+                    className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer pr-1"
+                  >
+                    shopping cart
+                    <BsBag fontSize={19} />
+                  </span>
                   <Link
                     to="/profile"
                     className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
