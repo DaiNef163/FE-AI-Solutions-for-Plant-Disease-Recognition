@@ -37,7 +37,7 @@ const Header = () => {
                                 <li>
                                     <Link
                                         className="text-base text-gray-800 transition hover:text-primary hover:text-xl hover:font-bold"
-                                        to={"/"}
+                                        to={pathname.home}
                                     >
                                         Giới thiệu
                                     </Link>
@@ -89,7 +89,7 @@ const Header = () => {
                             {isAuthenticated ? (
                                 <div className="sm:flex sm:gap-4">
                                     <Link
-                                        to="/profile"
+                                        to={pathname.profile}
                                         className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
                                     >
                                         {user?.name || "Người dùng"}
@@ -104,14 +104,14 @@ const Header = () => {
                             ) : (
                                 <div className="sm:flex sm:gap-4">
                                     <Link
-                                        to="/login"
+                                        to={pathname.login}
                                         className="block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#1c2930]"
                                     >
                                         Đăng nhập
                                     </Link>
                                     <Link
                                         className="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
-                                        to="/register"
+                                        to={pathname.signup}
                                     >
                                         Đăng ký
                                     </Link>
