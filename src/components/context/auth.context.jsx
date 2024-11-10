@@ -33,7 +33,7 @@ export function UserContextProvider({ children }) {
   //   }
   // }, []);
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("tokenUser");
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (token) {
@@ -59,7 +59,7 @@ export function UserContextProvider({ children }) {
           });
       }
     } else {
-      setReady(true); 
+      setReady(true);
     }
   }, []);
 

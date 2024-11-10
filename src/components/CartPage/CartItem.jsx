@@ -1,55 +1,63 @@
-import React from "react";
-import { formatCurrencyVND } from "../../util/index";
-import { CiCircleRemove } from "react-icons/ci";
-import { GoPlus } from "react-icons/go";
-import { RiSubtractFill } from "react-icons/ri";
+import React, { useState } from "react";
 
-function CartItem({ item, onQuantityChange, onItemDelete }) {
-    return (
-        <div className="flex items-center justify-between border-b border-gray-200 p-4">
-            <div className="flex items-center">
-                <img src={item.imageUrl} alt={item.name} className="w-16 h-16 rounded-md" />
-                <div className="ml-4">
-                    <h3 className="text-lg font-medium">{item.name}</h3>
-                    <p className="text-gray-500">{item.description}</p>
-                </div>
-            </div>
-            <div className="flex items-center">
-                <div className="flex items-center mr-4">
-                    <span className="text-gray-500">Số lượng:</span>
-                    <div className="flex items-center ml-2">
-                        <button
-                            onClick={() => onQuantityChange(item.id, item.quantity - 1)}
-                            className="bg-gray-100 px-2 py-1 rounded-l-md"
-                        >
-                            <RiSubtractFill />
-                        </button>
-                        <input
-                            type="number"
-                            value={item.quantity}
-                            onChange={(e) => onQuantityChange(item.id, parseInt(e.target.value, 10))}
-                            className="w-12 text-center px-2 py-1 rounded-md"
-                        />
-                        <button
-                            onClick={() => onQuantityChange(item.id, item.quantity + 1)}
-                            className="bg-gray-100 px-2 py-1 rounded-r-md"
-                        >
-                            <GoPlus />
-                        </button>
-                    </div>
-                </div>
-                <div className="text-lg font-medium">{formatCurrencyVND(item.price)}</div>
-                <div className="ml-4">
-                    <button
-                        onClick={() => onItemDelete(item.id)}
-                        className="text-red-600 hover:text-green-800 font-semibold text-2xl"
-                    >
-                        <CiCircleRemove />
-                    </button>
-                </div>
-            </div>
-        </div>
+import CartItem from "./CartItem"; // Replace with actual path
+import { formatCurrencyVND } from "../../util/index";
+import ProductDetail from "../../pages/detailProducts";
+
+function ShoppingCart() {
+  const [cartItems, setCartItems] = useState([]);
+
+  // Add item to cart
+  const handleAddToCart = (product) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevItems, { ...product, quantity: 1 }];
+      }
+    });
+  };
+
+  // Change quantity of an item
+  const handleQuantityChange = (id, newQuantity) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
     );
+  };
+
+  // Delete item from cart
+  const handleItemDelete = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  return (
+    <div>
+      <ProductDetail onAddToCart={handleAddToCart} />
+      <h2 className="text-2xl font-bold mb-4">Giỏ hàng</h2>
+      {cartItems.length === 0 ? (
+        <p>Giỏ hàng trống</p>
+      ) : (
+        cartItems.map((item) => (
+          <CartItem
+            key={item.id}
+            item={item}
+            onQuantityChange={handleQuantityChange}
+            onItemDelete={handleItemDelete}
+          />
+        ))
+      )}
+      <div className="text-right mt-4">
+        <strong>Tổng cộng: {formatCurrencyVND(cartItems.reduce((total, item) => total + item.price * item.quantity, 0))}</strong>
+      </div>
+    </div>
+  );
 }
 
-export default CartItem;
+export default ShoppingCart;

@@ -9,11 +9,11 @@ const Header = () => {
     useContext(UserContext);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
-
   const handleLogout = (ev) => {
     ev.preventDefault();
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
+    localStorage.removeItem("tokenUser");
     setUser(null);
     setIsAuthenticated(false);
     navigate("/");
@@ -50,14 +50,14 @@ const Header = () => {
                     Sản phẩm
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
                     to="/shop"
                   >
                     Cửa hàng
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
@@ -74,16 +74,39 @@ const Header = () => {
                     Liên hệ
                   </Link>
                 </li>
-                {isAuthenticated && (
+                {isAuthenticated && user?.role === "admin" && (
                   <li>
                     <Link
                       className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
-                      to="/"
+                      to="/admin"
                     >
-                      Quản 
+                      Quản lý
                     </Link>
                   </li>
                 )}
+                {isAuthenticated &&
+                  (user?.role === "admin" || user?.role === "staff") && (
+                    <li>
+                      <Link
+                        className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                        to="/create-product"
+                      >
+                        Đăng sản phẩm
+                      </Link>
+                    </li>
+                  )}
+
+                {isAuthenticated &&
+                  (user?.role === "admin" || user?.role === "staff") && (
+                    <li>
+                      <Link
+                        className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
+                        to="/create-news"
+                      >
+                        Đăng bài viết
+                      </Link>
+                    </li>
+                  )}
               </ul>
             </nav>
 
@@ -98,13 +121,14 @@ const Header = () => {
 
               {isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
-                  <span
+                  <Link
+                    to={"/shoppingcart"}
                     onClick={() => setIsCartOpen(!isCartOpen)}
                     className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer pr-1"
                   >
                     shopping cart
                     <BsBag fontSize={19} />
-                  </span>
+                  </Link>
                   <Link
                     to="/profile"
                     className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"

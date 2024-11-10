@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Button, Col, Divider, Form, Input, notification, Row } from "antd";
-import { loginApi } from "../util/api";
+import { loginApi } from "../../util/api";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../components/context/auth.context";
+import { UserContext } from "../../components/context/auth.context";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const LoginPage = () => {
@@ -16,7 +16,8 @@ const LoginPage = () => {
       console.log("API response:", res);
 
       if (res && res.EC === 0) {
-        localStorage.setItem("access_token", res.access_token);
+        // localStorage.setItem("access_token", res.access_token);
+        localStorage.setItem("tokenUser", res.tokenUser);
         localStorage.setItem("user", JSON.stringify(res.user));
 
         setUser(res.user);
