@@ -19,7 +19,7 @@
 //   PlusIcon,
 //   Squares2X2Icon,
 // } from "@heroicons/react/20/solid";
-// import { TestDataProduct } from "../components/data/products";
+// import { TestDataProduct } from "../components/data/product";
 
 // const sortOptions = [
 //   { name: "Phổ biến nhất", href: "#", current: true },

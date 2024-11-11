@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useCart } from "../components/CartPage/CartContext";
+import { useCart } from "../../components/ShoppingCart/CartContext";
 
 const sortOptions = [
   { name: "Phổ biến nhất", href: "#", current: true },
@@ -29,11 +29,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example(props) {
+export default function ProductPage(props) {
   const [products, setProducts] = useState([]);
   const [nameLeaf, setNameLeaf] = useState([]);
   const [selectedLeaf, setSelectedLeaf] = useState([]);
   const { addToCart } = useCart();
+  const [productsPerPage] = useState(8);
 
   useEffect(() => {
     axios
@@ -44,7 +45,7 @@ export default function Example(props) {
 
   useEffect(() => {
     axios
-      .get("/product/nameLeaf")
+      .get("/leaf/nameLeaf")
       .then((response) => setNameLeaf(response.data))
       .catch((error) => console.error("Error fetching name leaf:", error));
   }, []);

@@ -60,5 +60,54 @@ const forgotPassword = () => {
   };
   return axios.post(URL_API, data);
 };
+const createUProductAPi = async (
+  productName,
+  price,
+  description,
+  discount,
+  images,
+  nameLeaf
+) => {
+  try {
+    const formData = new FormData();
 
-export { createUserApi, loginApi, getUserApi, forgotPassword };
+    formData.append("productName", productName);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("discount", discount);
+    formData.append("nameLeaf", nameLeaf); // Chỉ truyền nameLeaf
+
+    // Kiểm tra nếu có ảnh và thêm vào formData
+    if (images) {
+      formData.append("images", images); // Chỉ khi images có giá trị
+    }
+
+    const token = localStorage.getItem("tokenUser");
+
+    // Gửi yêu cầu POST với FormData
+    const response = await axios.post("/register", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Đảm bảo Content-Type là multipart/form-data
+        Authorization: `Bearer ${token}`, // Nếu có token
+      },
+    });
+
+    console.log("Response từ server:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi tạo sản phẩm:", error);
+
+    // Nếu có lỗi từ server, hiển thị thông báo cụ thể
+    const errorMessage =
+      error.response?.data?.message || "Lỗi kết nối với server.";
+    return { success: false, message: errorMessage };
+  }
+};
+
+export {
+  createUserApi,
+  loginApi,
+  getUserApi,
+  forgotPassword,
+  createUProductAPi,
+};

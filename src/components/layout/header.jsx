@@ -44,7 +44,7 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    to={"/products"}
+                    to={"/product"}
                     className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer hover:text-primary hover:text-xl hover:font-bold"
                   >
                     Sản phẩm

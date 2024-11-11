@@ -10,14 +10,14 @@ import ForgotPassword from "./pages/UserPage/ForgetPassword";
 import OTPForm from "./components/otpForgetPassword";
 import ResetPasswordForm from "./components/resetPassword";
 import ProfileUser from "./components/profileUser";
-import ContactsPage from "./pages/ContactsPage";
-import NewsPage from "./pages/NewsPage";
-import ShopPage from "./pages/ShopPage";
-import ProductPage from "./pages/ProductPage";
-import CreateNews from "./pages/createPage/createNews";
-import ProductDetail from "./pages/detailProducts";
-import CartPage from "./pages/CartPage";
-import CreateProduct from "./pages/createPage/createProduct";
+import ProductDetail from "./pages/ProductPage/detailProducts";
+import CreateNews from "./pages/NewsPage/createNews";
+import CreateProduct from "./pages/ProductPage/createProduct";
+import NewsPage from "./pages/NewsPage/NewsPage";
+import CartPage from "./pages/CartPage/CartPage";
+import ProductPage from "./pages/ProductPage/ProductPage";
+import ContactsPage from "./pages/ContactsPage/ContactsPage";
+
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
@@ -35,9 +35,8 @@ function App() {
           <Route path="/forgetpassword" element={<ForgotPassword />} />
           <Route path="/inputotp" element={<OTPForm />} />
           <Route path="/resetpassword" element={<ResetPasswordForm />} />
-          <Route path="/products" element={<ProductPage />} />
+          <Route path="/product" element={<ProductPage />} />
           <Route path="/shoppingcart" element={<CartPage />} />
-          <Route path="/shop" element={<ShopPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/contacts" element={<ContactsPage />} />
           <Route path="/profile" element={<ProfileUser />} />
