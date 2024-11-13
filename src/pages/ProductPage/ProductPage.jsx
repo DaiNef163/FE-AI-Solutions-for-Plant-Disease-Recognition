@@ -14,7 +14,7 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../components/ShoppingCart/CartContext";
 
 const sortOptions = [
@@ -35,6 +35,7 @@ export default function ProductPage(props) {
   const [selectedLeaf, setSelectedLeaf] = useState([]);
   const { addToCart } = useCart();
   const [productsPerPage] = useState(8);
+  const navigate = useNavigate(); // For navigation to the shopping cart page
 
   useEffect(() => {
     axios
@@ -56,6 +57,13 @@ export default function ProductPage(props) {
         ? prevSelectedLeaf.filter((item) => item !== leaf)
         : [...prevSelectedLeaf, leaf]
     );
+  };
+
+  const handleAddToCart = (productId, quantity) => {
+    // Call the addToCart function from CartContext
+    addToCart(productId, quantity);
+    // Navigate to the shopping cart page after adding the product
+    navigate("/shoppingcart");
   };
 
   const filteredProducts = selectedLeaf.length
@@ -184,12 +192,6 @@ export default function ProductPage(props) {
                             >
                               Chi tiết
                             </Link>
-                            <button
-                              onClick={() => addToCart(product._id, 1)}
-                              className="text-lg px-3 bg-primary mx-1 rounded-2xl"
-                            >
-                              Mua hàng
-                            </button>
                           </div>
                         </div>
                       </Link>

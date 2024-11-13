@@ -9,7 +9,6 @@ import Register from "./pages/UserPage/register";
 import ForgotPassword from "./pages/UserPage/ForgetPassword";
 import OTPForm from "./components/otpForgetPassword";
 import ResetPasswordForm from "./components/resetPassword";
-import ProfileUser from "./components/profileUser";
 import ProductDetail from "./pages/ProductPage/detailProducts";
 import CreateNews from "./pages/NewsPage/createNews";
 import CreateProduct from "./pages/ProductPage/createProduct";
@@ -17,11 +16,12 @@ import NewsPage from "./pages/NewsPage/NewsPage";
 import CartPage from "./pages/CartPage/CartPage";
 import ProductPage from "./pages/ProductPage/ProductPage";
 import ContactsPage from "./pages/ContactsPage/ContactsPage";
+import ProfileUser from "./pages/UserPage/profileUser";
 
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
-  "access_token"
+  "tokenUser"
 )}`;
 
 function App() {

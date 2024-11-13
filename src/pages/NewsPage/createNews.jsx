@@ -1,73 +1,131 @@
-import React from "react";
-import { Button, Form, Input, InputNumber, Upload } from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Upload, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-const normFile = (e) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
-const onFinish = (values) => {
-  console.log(values);
-};
-const CreateNews = () => (
-  <Form
-    {...layout}
-    name="nest-messages"
-    onFinish={onFinish}
-    style={{
-      maxWidth: 600,
-    }}
-  >
-    <Form.Item name={["user", "name"]} label="Title">
-      <Input />
-    </Form.Item>
+import axios from "axios";
 
-    <Form.Item name={""} label="Website">
-      <Input />
-    </Form.Item>
-    <Form.Item name={""} label="Introduction">
-      <Input.TextArea />
-    </Form.Item>
-    <div className=" flex justify-center items-center">
-      <Form.Item
-        label="Ảnh sản phẩm"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
+function CreateProduct() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState(null);
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
+  const handleSubmit = async (values) => {
+    if (!image) {
+      setError("Vui lòng chọn ảnh cho sản phẩm.");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng chọn ảnh cho sản phẩm.",
+      });
+      return;
+    }
+    if (!title || !description) {
+      setError("Vui lòng điền đầy đủ thông tin sản phẩm.");
+      notification.error({
+        message: "Lỗi",
+        description: "Vui lòng điền đầy đủ thông tin sản phẩm.",
+      });
+      return;
+    }
+
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("images", image);
+
+    const token = localStorage.getItem("tokenUser");
+
+    try {
+      const response = await axios.post("/post/createPostNews", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      notification.success({
+        message: "Thành công",
+        description: "Sản phẩm đã được tạo thành công!",
+      });
+      console.log(response.data);
+    } catch (err) {
+      setError("Tạo sản phẩm thất bại: " + err.response?.data?.message);
+      notification.error({
+        message: "Lỗi",
+        description: "Tạo sản phẩm thất bại.",
+      });
+      console.error(err);
+    }
+  };
+
+  return (
+    <div>
+      <h5 className="text-3xl font-bold text-center mb-4">Thông tin sản phẩm</h5>
+      <Form
+        name="basic"
+        onFinish={handleSubmit}
+        autoComplete="off"
+        layout="vertical"
+        style={{ maxWidth: 600, margin: "0 auto" }}
       >
-        <Upload
-          action="/upload.do"
-          listType="picture-card"
-          className="p-2 border-2 border-dashed"
+        <Form.Item
+          label="Tiêu đề sản phẩm"
+          name="title"
+          value={title}
+          rules={[{ required: true, message: "Vui lòng nhập tiêu đề sản phẩm" }]}
         >
-          <button
-            className="bg-transparent border-0 hover:bg-gray-200 p-2"
-            type="button"
+          <Input onChange={(e) => setTitle(e.target.value)} />
+        </Form.Item>
+
+        <Form.Item
+          label="Mô tả sản phẩm"
+          name="description"
+          rules={[{ required: true, message: "Vui lòng nhập mô tả sản phẩm" }]}
+        >
+          <Input.TextArea
+            rows={4}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Ảnh sản phẩm"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload
+            listType="picture-card"
+            className="p-2 border-2 border-dashed"
+            beforeUpload={(file) => {
+              setImage(file);
+              return false;
+            }}
           >
-            <PlusOutlined />
-            <div className="mt-2 text-sm">Upload</div>
-          </button>
-        </Upload>
-      </Form.Item>
+            <button
+              className="bg-transparent border-0 hover:bg-gray-200 p-2"
+              type="button"
+            >
+              <PlusOutlined />
+              <div className="mt-2 text-sm">Upload</div>
+            </button>
+          </Upload>
+        </Form.Item>
+
+        <Form.Item className="flex justify-center items-center">
+          <Button className="bg-primary" type="primary" htmlType="submit">
+            Đăng sản phẩm
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
-    <Form.Item
-      wrapperCol={{
-        ...layout.wrapperCol,
-        offset: 8,
-      }}
-    >
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-);
-export default CreateNews;
+  );
+}
+
+export default CreateProduct;

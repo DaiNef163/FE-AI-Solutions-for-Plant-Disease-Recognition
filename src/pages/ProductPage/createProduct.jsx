@@ -50,7 +50,6 @@ function CreateProduct() {
   const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (values) => {
-    // Kiểm tra nếu có ảnh và các trường bắt buộc
     if (!image) {
       setError("Vui lòng chọn ảnh cho sản phẩm.");
       notification.error({
@@ -68,7 +67,7 @@ function CreateProduct() {
       return;
     }
 
-    setError(null); // Reset lỗi
+    setError(null); 
 
     const formData = new FormData();
     formData.append("productName", productName);

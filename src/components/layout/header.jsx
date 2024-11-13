@@ -18,9 +18,9 @@ const Header = () => {
     setIsAuthenticated(false);
     navigate("/");
   };
-  console.log("check user?.name", user?.name);
-  console.log("check localStorage.getItem(user)", localStorage.getItem("user"));
-  console.log("Stored user:", localStorage.getItem("user"));
+  // console.log("check user?.name", user?.name);
+  // console.log("check localStorage.getItem(user)", localStorage.getItem("user"));
+  // console.log("Stored user:", localStorage.getItem("user"));
 
   return (
     <div className="w-full relative border-b p-1">
