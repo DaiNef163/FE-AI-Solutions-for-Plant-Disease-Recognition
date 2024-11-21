@@ -16,7 +16,8 @@ const LoginPage = () => {
       console.log("API response:", res);
 
       if (res && res.EC === 0) {
-        // localStorage.setItem("access_token", res.access_token);
+        localStorage.setItem("access_token", res.access_token);
+        localStorage.setItem("_id", res.user._id);
         localStorage.setItem("tokenUser", res.tokenUser);
         localStorage.setItem("user", JSON.stringify(res.user));
 
