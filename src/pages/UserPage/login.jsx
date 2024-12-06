@@ -48,74 +48,77 @@ const LoginPage = () => {
   };
 
   return (
-    <Row justify={"center"} style={{ marginTop: "30px" }}>
-      <Col xs={24} md={16} lg={8}>
-        <fieldset
-          style={{
-            padding: "15px",
-            margin: "5px",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-          }}
-        >
-          <legend>Đăng Nhập</legend>
-          <Form
-            name="basic"
-            onFinish={onFinish}
-            autoComplete="off"
-            layout="vertical"
+    <div className="bg-backgroundPageGradient animate-fade animate-once animate-duration-1000 animate-delay-100">
+      <Row justify={"center"} style={{ marginTop: "30px",padding:"20px" }}>
+        <Col xs={24} md={16} lg={8}>
+          <fieldset
+            style={{
+              padding: "15px",
+              margin: "5px",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              background:"white",
+            }}
           >
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập email!",
-                },
-                {
-                  type: "email",
-                  message: "Vui lòng nhập đúng định dạng email!",
-                },
-              ]}
+            <legend className="p-4 rounded-full text-3xl font-medium ">Đăng Nhập</legend>
+            <Form
+              name="basic"
+              onFinish={onFinish}
+              autoComplete="off"
+              layout="vertical"
             >
-              <Input />
-            </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập email!",
+                  },
+                  {
+                    type: "email",
+                    message: "Vui lòng nhập đúng định dạng email!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            <Form.Item
-              label="Mật khẩu"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập mật khẩu!",
-                },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
+              <Form.Item
+                label="Mật khẩu"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập mật khẩu!",
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
 
-            <Form.Item className="flex justify-center items-center">
-              <Button className="bg-primary" type="primary" htmlType="submit">
-                Đăng nhập
-              </Button>
-            </Form.Item>
-          </Form>
-          <Link className="flex justify-center items-center" to={"/"}>
-            <ArrowLeftOutlined /> Quay lại trang chủ
-          </Link>
-          <Divider />
-          <div className="flex justify-around">
-            <div>
-              Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
+              <Form.Item className="flex justify-center items-center">
+                <Button className="bg-primary" type="primary" htmlType="submit">
+                  Đăng nhập
+                </Button>
+              </Form.Item>
+            </Form>
+            <Link className="flex justify-center items-center" to={"/"}>
+              <ArrowLeftOutlined /> Quay lại trang chủ
+            </Link>
+            <Divider />
+            <div className="flex justify-around">
+              <div>
+                Chưa có tài khoản? <Link to={"/register"}>Đăng ký tại đây</Link>
+              </div>
+              <div>
+                <Link to={"/forgetpassword"}>Quên mật khẩu</Link>
+              </div>
             </div>
-            <div>
-              <Link to={"/forgetpassword"}>Quên mật khẩu</Link>
-            </div>
-          </div>
-        </fieldset>
-      </Col>
-    </Row>
+          </fieldset>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

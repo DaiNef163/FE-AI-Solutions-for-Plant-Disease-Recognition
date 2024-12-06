@@ -4,9 +4,9 @@ import Footer from "./components/layout/footer";
 
 export default function Layout() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen p-0 m-0 animate-fade-down animate-once animate-duration-1000 ">
       <Header /> 
-      <div className="flex-grow p-4 flex flex-col justify-center">
+      <div className=" flex flex-col justify-center">
         <Outlet />
       </div>
       <Footer /> 

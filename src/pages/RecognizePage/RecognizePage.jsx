@@ -32,7 +32,7 @@ const DiseaseRecognition = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center bg-gray-50 ">
+        <div className="flex flex-col items-center justify-center bg-backgroundPageGradient p-20">
             <div className="w-96 bg-white shadow-md rounded-lg p-6 m-5">
                 <h1 className="text-2xl font-bold text-gray-700 text-center mb-6">Disease Recognition</h1>
 

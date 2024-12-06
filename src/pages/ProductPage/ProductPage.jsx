@@ -16,6 +16,7 @@ import {
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../components/ShoppingCart/CartContext";
+import SlideProductPage from "../../components/ProductP/slideProductPage";
 
 const sortOptions = [
   { name: "Phổ biến nhất", href: "#", current: true },
@@ -35,7 +36,7 @@ export default function ProductPage(props) {
   const [selectedLeaf, setSelectedLeaf] = useState([]);
   const { addToCart } = useCart();
   const [productsPerPage] = useState(8);
-  const navigate = useNavigate(); // For navigation to the shopping cart page
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -59,21 +60,17 @@ export default function ProductPage(props) {
     );
   };
 
-  const handleAddToCart = (productId, quantity) => {
-    // Call the addToCart function from CartContext
-    addToCart(productId, quantity);
-    // Navigate to the shopping cart page after adding the product
-    navigate("/shoppingcart");
-  };
-
   const filteredProducts = selectedLeaf.length
     ? products.filter((product) => selectedLeaf.includes(product.nameLeaf))
     : products;
 
   return (
-    <div className="bg-white">
+    <div className="bg-backgroundPageGradient">
       <div>
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* <div className="mt-1">
+            <SlideProductPage></SlideProductPage>
+          </div> */}
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Sản phẩm
@@ -122,7 +119,7 @@ export default function ProductPage(props) {
               <form className="hidden lg:block w-4/5">
                 <Disclosure as="div" className="border-b border-gray-200 py-6">
                   <h3 className="-my-3 flow-root">
-                    <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                    <DisclosureButton className="group flex w-full items-center justify-between py-3 text-sm text-gray-400 hover:text-gray-500">
                       <span className="font-medium text-2xl text-gray-900">
                         Tên các loại lá
                       </span>
@@ -162,39 +159,45 @@ export default function ProductPage(props) {
               </form>
 
               <div className="lg:col-span-4">
-                <div className="grid grid-cols-4 p-1">
+                <div className="grid grid-cols-4 p-1 gap-1 ">
                   {filteredProducts.map((product) => (
-                    <div key={product._id} className="p-1">
-                      <Link to={`/product/${product._id}`}>
-                        <div className="p-3 border-2 border-primary rounded-lg w-full h-80">
-                          <img
-                            alt={product.productName}
-                            className="w-full h-44 object-cover object-center rounded-xl"
-                            src={product.images?.[0] || "default-image.jpg"}
-                          />
-                          <div className="flex pt-2">
-                            <div className="flex flex-col justify-start ml-4">
-                              <h1 className="text-orange-500 text-xl flex-shrink-0 font-bold">
-                                {product.productName}
-                              </h1>
-                              <p className="text-blue-500 text-xs">
-                                {product.description}
-                              </p>
-                              <p className="text-gray-600">
-                                Giá: {product.price} VND
-                              </p>
+                    <div
+                      key={product._id}
+                      className="p-1 rounded-md bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+                    >
+                      <div className="flex h-full w-full items-center justify-center bg-white back">
+                        {" "}
+                        <Link to={`/product/${product._id}`}>
+                          <div className="p-3 border-2 border-primary rounded-lg w-full h-80">
+                            <img
+                              alt={product.productName}
+                              className="w-full h-44 object-cover object-center rounded-xl"
+                              src={product.images?.[0] || "default-image.jpg"}
+                            />
+                            <div className="flex pt-2">
+                              <div className="flex flex-col justify-start ml-4">
+                                <h1 className="text-orange-500 text-xl flex-shrink-0 font-bold">
+                                  {product.productName}
+                                </h1>
+                                <p className="text-blue-500 text-xs">
+                                  {product.description}
+                                </p>
+                                <p className="text-gray-600">
+                                  Giá: {product.price} VND
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex justify-around pt-2">
+                              <Link
+                                to={`/product/${product._id}`}
+                                className="w-full text-center text-white text-lg px-3 rounded-2xl bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
+                              >
+                                Chi tiết
+                              </Link>
                             </div>
                           </div>
-                          <div className="flex justify-around pt-2">
-                            <Link
-                              to={`/product/${product._id}`}
-                              className="text-lg px-3 bg-primary mx-1 rounded-2xl"
-                            >
-                              Chi tiết
-                            </Link>
-                          </div>
-                        </div>
-                      </Link>
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>

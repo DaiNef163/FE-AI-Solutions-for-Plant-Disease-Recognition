@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 function ProductDetail() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -25,8 +26,8 @@ function ProductDetail() {
       .post(
         "/carts/addtocart",
         {
-          productId: product._id,  // Assuming _id is used for product identification
-          quantity: 1,  // Default quantity is 1
+          productId: product._id,  
+          quantity: 1,  
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -42,43 +43,50 @@ function ProductDetail() {
   };
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className="text-center text-xl">Loading...</div>;
   }
 
   return (
-    <div className="product-detail">
-      <div className="mx-auto max-w-5xl">
-        <div className="flex justify-around ">
-          <div className="">
+    <div className="bg-gray-100 py-8">
+      <div className="mx-auto max-w-5xl px-4">
+        <div className="flex flex-wrap justify-center items-start gap-12">
+          {/* Image Section */}
+          <div className="flex-1 w-full md:w-1/2">
             <img
               alt={product.productName}
-              className="w-64 h-64 rounded-xl object-cover"
+              className="w-full h-auto rounded-xl object-cover shadow-lg"
               src={product.images?.[0] || "default-image.jpg"}
             />
           </div>
-          <div>
-            <h1 className="text-4xl font-bold">{product.productName}</h1>
-            <p>{product.description}</p>
-            <p>Giá: {product.price} VND</p>
-            <p>Tên lá: {product.nameLeaf}</p>
-            <p>Giảm giá: {product.discount}</p>
-            <div className=" flex">
+
+          {/* Product Details */}
+          <div className="flex-1 w-full md:w-1/2">
+            <h1 className="text-4xl font-bold text-gray-800">{product.productName}</h1>
+            <p className="text-lg text-gray-600 mt-2">{product.description}</p>
+            <p className="text-xl font-semibold text-primary mt-4">Giá: {product.price} VND</p>
+            <p className="text-sm text-gray-500 mt-2">Tên lá: {product.nameLeaf}</p>
+            <p className="text-lg text-green-600 mt-2">Giảm giá: {product.discount}</p>
+
+            {/* Additional Images */}
+            <div className="flex gap-4 mt-6">
               {product.images &&
                 product.images.map((image, index) => (
-                  <div key={index}>
+                  <div key={index} className="w-32 h-32 rounded-lg overflow-hidden shadow-md">
                     <img
                       src={image}
                       alt={`Image ${index + 1}`}
-                      className="w-32 h-32 rounded-lg"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 ))}
             </div>
+
+            {/* Add to Cart Button */}
             <button
               onClick={addToCartHandler}
-              className="text-lg px-3 bg-primary mx-1 rounded-2xl"
+              className="mt-6 w-full sm:w-auto px-6 py-3 bg-backgroundPageGradient text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition-colors animate-bounce animate-infinite"
             >
-              Mua hàng
+              Thêm vào giỏ hàng
             </button>
           </div>
         </div>
