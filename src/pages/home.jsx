@@ -42,8 +42,8 @@ export const HomePage = () => {
                   </div>
                 </div>
 
-                <Link
-                  href="/product"
+                <Link to={"/recognize"}
+                  href="/"
                   className="inline-block rounded-md border border-transparent px-8 py-3 text-center font-medium text-white bg-cyan-500 shadow-lg shadow-cyan-500/50 hover:bg-backgroundPageGradient animate-bounce animate-infinite"
                 >
                   Trải nghiệm ngay

@@ -21,8 +21,7 @@ import Page404 from "../page404/page404";
 import axios from "axios";
 
 function CreateProduct() {
-  const { user, isAuthenticated, setUser, setIsAuthenticated } =
-    useContext(UserContext);
+  const { user, isAuthenticated } = useContext(UserContext);
   const normFile = (e) => {
     if (Array.isArray(e)) {
       return e;
@@ -31,11 +30,12 @@ function CreateProduct() {
   };
   const navigate = useNavigate();
 
-  const [nameLeaf, setNameLeaf] = useState([]);
+  const [nameLeafList, setNameLeafList] = useState([]);
+  const [selectedNameLeaf, setSelectedNameLeaf] = useState(""); // For the selected leaf type
   useEffect(() => {
     axios
       .get("/leaf/nameLeaf")
-      .then((response) => setNameLeaf(response.data))
+      .then((response) => setNameLeafList(response.data))
       .catch((error) => console.error("Error fetching name leaf:", error));
   }, []);
 
@@ -45,12 +45,12 @@ function CreateProduct() {
   const [discount, setDiscount] = useState("");
   const [accept, setAccept] = useState(false);
   const [slug, setSlug] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (values) => {
-    if (!image) {
+    if (image.length === 0) {
       setError("Vui lòng chọn ảnh cho sản phẩm.");
       notification.error({
         message: "Lỗi",
@@ -58,7 +58,7 @@ function CreateProduct() {
       });
       return;
     }
-    if (!productName || !price || !description || !nameLeaf) {
+    if (!productName || !price || !description || !selectedNameLeaf) {
       setError("Vui lòng điền đầy đủ thông tin sản phẩm.");
       notification.error({
         message: "Lỗi",
@@ -67,7 +67,7 @@ function CreateProduct() {
       return;
     }
 
-    setError(null); 
+    setError(null);
 
     const formData = new FormData();
     formData.append("productName", productName);
@@ -76,8 +76,14 @@ function CreateProduct() {
     formData.append("discount", discount);
     formData.append("accept", accept);
     formData.append("slug", slug);
-    formData.append("nameLeaf", nameLeaf);
-    formData.append("images", image);
+    formData.append("nameLeaf", selectedNameLeaf);
+
+    // Đảm bảo image là mảng và xử lý từng file
+    if (Array.isArray(image) && image.length > 0) {
+      image.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
 
     const token = localStorage.getItem("tokenUser");
 
@@ -165,9 +171,10 @@ function CreateProduct() {
                   </Form.Item>
 
                   <Form.Item label="Loại lá" name="nameLeaf">
-                    <Select onChange={(value) => setNameLeaf(value)}>
-                      {Array.isArray(nameLeaf) && nameLeaf.length > 0 ? (
-                        nameLeaf.map((leaf) => (
+                    <Select onChange={(value) => setSelectedNameLeaf(value)}>
+                      {Array.isArray(nameLeafList) &&
+                      nameLeafList.length > 0 ? (
+                        nameLeafList.map((leaf) => (
                           <Select.Option key={leaf} value={leaf}>
                             {leaf}
                           </Select.Option>
@@ -190,9 +197,15 @@ function CreateProduct() {
                         listType="picture-card"
                         className="p-2 border-2 border-dashed"
                         beforeUpload={(file) => {
-                          setImage(file);
-                          return false;
+                          setImage((prevImages) => [...prevImages, file]); // Chắc chắn rằng image luôn là một mảng
+                          return false; // Ngừng việc upload tự động
                         }}
+                        onRemove={(file) => {
+                          setImage((prevImages) =>
+                            prevImages.filter((item) => item.uid !== file.uid)
+                          ); // Xóa ảnh khi người dùng xóa
+                        }}
+                        multiple // Cho phép chọn nhiều ảnh
                       >
                         <button
                           className="bg-transparent border-0 hover:bg-gray-200 p-2"

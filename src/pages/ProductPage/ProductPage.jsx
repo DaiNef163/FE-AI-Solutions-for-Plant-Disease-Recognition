@@ -14,29 +14,22 @@ import {
   PlusIcon,
 } from "@heroicons/react/20/solid";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCart } from "../../components/ShoppingCart/CartContext";
-import SlideProductPage from "../../components/ProductP/slideProductPage";
+import { Rate } from "antd";
 
-const sortOptions = [
-  { name: "Phổ biến nhất", href: "#", current: true },
-  { name: "Xếp hạng cao nhất", href: "#", current: false },
-  { name: "Mới nhất", href: "#", current: false },
-  { name: "Giá: Thấp đến Cao", href: "#", current: false },
-  { name: "Giá: Cao đến Thấp", href: "#", current: false },
-];
+const PRODUCTS_PER_PAGE = 8;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ProductPage(props) {
+export default function ProductPage() {
   const [products, setProducts] = useState([]);
   const [nameLeaf, setNameLeaf] = useState([]);
   const [selectedLeaf, setSelectedLeaf] = useState([]);
-  const { addToCart } = useCart();
-  const [productsPerPage] = useState(8);
-  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
 
   useEffect(() => {
     axios
@@ -58,60 +51,30 @@ export default function ProductPage(props) {
         ? prevSelectedLeaf.filter((item) => item !== leaf)
         : [...prevSelectedLeaf, leaf]
     );
+    setCurrentPage(1); // Reset về trang đầu khi lọc
   };
 
   const filteredProducts = selectedLeaf.length
     ? products.filter((product) => selectedLeaf.includes(product.nameLeaf))
     : products;
 
+  const currentProducts = filteredProducts.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className="bg-backgroundPageGradient">
       <div>
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* <div className="mt-1">
-            <SlideProductPage></SlideProductPage>
-          </div> */}
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Sản phẩm
             </h1>
-
-            <div className="flex items-center">
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sắp xếp
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    />
-                  </MenuButton>
-                </div>
-
-                <MenuItems
-                  transition
-                  className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-                >
-                  <div className="py-1">
-                    {sortOptions.map((option) => (
-                      <MenuItem key={option.name}>
-                        <a
-                          href={option.href}
-                          className={classNames(
-                            option.current
-                              ? "font-medium text-gray-900"
-                              : "text-gray-500",
-                            "block px-4 py-2 text-sm"
-                          )}
-                        >
-                          {option.name}
-                        </a>
-                      </MenuItem>
-                    ))}
-                  </div>
-                </MenuItems>
-              </Menu>
-            </div>
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
@@ -160,13 +123,12 @@ export default function ProductPage(props) {
 
               <div className="lg:col-span-4">
                 <div className="grid grid-cols-4 p-1 gap-1 ">
-                  {filteredProducts.map((product) => (
+                  {currentProducts.map((product) => (
                     <div
                       key={product._id}
                       className="p-1 rounded-md bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
                     >
                       <div className="flex h-full w-full items-center justify-center bg-white back">
-                        {" "}
                         <Link to={`/product/${product._id}`}>
                           <div className="p-3 border-2 border-primary rounded-lg w-full h-80">
                             <img
@@ -174,16 +136,16 @@ export default function ProductPage(props) {
                               className="w-full h-44 object-cover object-center rounded-xl"
                               src={product.images?.[0] || "default-image.jpg"}
                             />
-                            <div className="flex pt-2">
-                              <div className="flex flex-col justify-start ml-4">
+                            <div className="px-2 pt-2">
+                              <div className="flex flex-col text-center">
                                 <h1 className="text-orange-500 text-xl flex-shrink-0 font-bold">
                                   {product.productName}
                                 </h1>
-                                <p className="text-blue-500 text-xs">
-                                  {product.description}
-                                </p>
                                 <p className="text-gray-600">
                                   Giá: {product.price} VND
+                                </p>
+                                <p>
+                                  <Rate allowHalf defaultValue={4.5} />
                                 </p>
                               </div>
                             </div>
@@ -192,13 +154,30 @@ export default function ProductPage(props) {
                                 to={`/product/${product._id}`}
                                 className="w-full text-center text-white text-lg px-3 rounded-2xl bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
                               >
-                                Chi tiết
+                                Chi tiết sản phẩm
                               </Link>
                             </div>
                           </div>
                         </Link>
                       </div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                <div className="flex justify-center mt-4">
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index + 1}
+                      onClick={() => handlePageChange(index + 1)}
+                      className={`mx-1 px-3 py-1 rounded-md ${
+                        currentPage === index + 1
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-300 text-black"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
                   ))}
                 </div>
               </div>

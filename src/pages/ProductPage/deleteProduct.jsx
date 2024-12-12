@@ -3,118 +3,47 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const DeleteProduct = () => {
-  const { productId } = useParams(); // Lấy tham số 'id' từ URL
+  const { productId } = useParams(); // Get the 'productId' from the URL
   const [product, setProduct] = useState(null);
-  const [formData, setFormData] = useState({
-    productName: "",
-    price: "",
-    description: "",
-    discount: "",
-    nameLeaf: "",
-    images: null,
-  });
 
   useEffect(() => {
     if (productId) {
-      // Lấy thông tin sản phẩm từ API bằng 'id'
+      // Fetch the product details from the API
       axios
-        .get(`/product/deleteProduct/${productId}`)
+        .get(`/product/deleteproduct/${productId}`)
         .then((response) => {
           setProduct(response.data);
-          // Cập nhật formData khi dữ liệu sản phẩm đã được lấy
-          setFormData({
-            productName: response.data.productName || "",
-            price: response.data.price || "",
-            description: response.data.description || "",
-            discount: response.data.discount || "",
-            nameLeaf: response.data.nameLeaf || "",
-            images: null, // giữ hình ảnh riêng biệt
-          });
         })
         .catch((error) => console.error("Error fetching product:", error));
     }
   }, [productId]);
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleImageChange = (e) => {
-    setFormData({ ...formData, images: e.target.files });
-  };
-
-  const handleSubmit = (e) => {
+  const handleDelete = (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("productId", productId); 
-    Object.keys(formData).forEach((key) => {
-      if (key === "images" && formData.images) {
-        Array.from(formData.images).forEach((file) => data.append("images", file));
-      } else {
-        data.append(key, formData[key]);
-      }
-    });
 
     axios
-      .post(`/product/DeleteProduct`, data) // Gửi yêu cầu PUT (cập nhật) đến API
-      .then((response) => alert("Cập nhật thành công"))
-      .catch((error) => console.error("Error updating product:", error));
+      .delete(`/product/deleteproduct/${productId}`) // Use DELETE method to delete the product
+      .then((response) => {
+        alert("Sản phẩm đã được xóa thành công");
+      })
+      .catch((error) => console.error("Error deleting product:", error));
   };
 
   if (!product) return <div>Loading...</div>;
 
   return (
-    <form key={""} onSubmit={handleSubmit}>
-      <label>
-        Tên sản phẩm:
-        <input
-          type="text"
-          name="productName"
-          value={formData.productName}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Giá:
-        <input
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Mô tả:
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Giảm giá:
-        <input
-          type="number"
-          name="discount"
-          value={formData.discount}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Loại lá:
-        <input
-          type="text"
-          name="nameLeaf"
-          value={formData.nameLeaf}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label>
-        Hình ảnh:
-        <input type="file" name="images" multiple onChange={handleImageChange} />
-      </label>
-      <button type="submit">xóa</button>
-    </form>
+    <div>
+      <h2>Xác nhận xóa sản phẩm</h2>
+      <p>Tên sản phẩm: {product.productName}</p>
+      <p>Giá: {product.price}</p>
+      <p>Mô tả: {product.description}</p>
+      <p>Giảm giá: {product.discount}</p>
+      <p>Loại lá: {product.nameLeaf}</p>
+
+      <form onSubmit={handleDelete}>
+        <button type="submit">Xóa sản phẩm</button>
+      </form>
+    </div>
   );
 };
 

@@ -47,7 +47,7 @@ function ProductDetail() {
   }
 
   return (
-    <div className="bg-gray-100 py-8">
+    <div className="bg-backgroundPageGradient py-8">
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex flex-wrap justify-center items-start gap-12">
           {/* Image Section */}

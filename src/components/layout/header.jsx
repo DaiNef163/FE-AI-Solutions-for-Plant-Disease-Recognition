@@ -3,12 +3,14 @@ import { BsBag } from "react-icons/bs";
 import { UserContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidLeaf } from "react-icons/bi";
+import { Dropdown, Space } from "antd";
 
 const Header = () => {
   const { user, isAuthenticated, setUser, setIsAuthenticated } =
     useContext(UserContext);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const handleLogout = (ev) => {
     ev.preventDefault();
     localStorage.removeItem("access_token");
@@ -18,174 +20,139 @@ const Header = () => {
     setIsAuthenticated(false);
     navigate("/");
   };
-  // console.log("check user?.name", user?.name);
-  // console.log("check localStorage.getItem(user)", localStorage.getItem("user"));
-  // console.log("Stored user:", localStorage.getItem("user"));
+
+  const getMenuItems = () => {
+    const items = [];
+
+    if (
+      user?.role === "admin" ||
+      user?.role === "staff" ||
+      user?.role === "customer"
+    ) {
+      items.push({
+        key: "5",
+        label: <Link to="/profile">Trang cá nhân</Link>,
+      });
+    }
+
+    if (user?.role === "admin" || user?.role === "staff") {
+      items.push(
+        {
+          key: "3",
+          label: <Link to="/create-news">Đăng bài viết</Link>,
+        },
+        {
+          key: "4",
+          label: <Link to="/create-product">Đăng sản phẩm</Link>,
+        }
+      );
+    }
+    if (user?.role === "admin") {
+      items.push(
+        {
+          key: "1",
+          label: <Link to="/maganeproduct">Quản lí sản phẩm</Link>,
+        },
+        {
+          key: "2",
+          label: <Link to="/manage-news">Quản lí bài viết</Link>,
+        }
+      );
+    }
+
+    return items;
+  };
+
+  const menuItems = getMenuItems();
 
   return (
-    <div className="w-full relative ">
-      <header className="rounded-sm bg-backgroundPageGradient border-b-2 border-solid border-sky-400">
-        <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-8 px-4 sm:px-6 lg:px-10 ">
-          <Link
-            className="block text-teal-600 mt-1 animate-rotate-x animate-infinite animate-duration-[2000ms] animate-delay-1000"
-            to={"/"}
-          >
-            <span className="sr-only">Home</span>
-            <BiSolidLeaf fontSize={60} />
-          </Link>
+    <header className="rounded-sm bg-backgroundPageGradient ">
+      <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-8 px-4 sm:px-6 lg:px-10 ">
+        <Link
+          className="block text-teal-600 mt-1 animate-rotate-x animate-infinite animate-duration-[2000ms] animate-delay-1000"
+          to="/"
+        >
+          <BiSolidLeaf fontSize={60} />
+        </Link>
 
-          <div className="flex flex-1 items-center justify-end md:justify-between mt-1">
-            <nav aria-label="Global" className="hidden md:block">
-              <ul className="flex items-center gap-6 text-sm">
-                <li>
-                  <Link
-                    className="text-base text-white font-medium transition hover:text-primary hover:text-xl hover:font-bold"
-                    to={"/introductionAI"}
-                  >
-                    Giới thiệu
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="text-base text-white font-medium transition hover:text-primary hover:text-xl hover:font-bold"
-                    to={"/recognize"}
-                  >
-                    Chuẩn đoán
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"/product"}
-                    className="text-base text-white font-medium transition hover:text-primary hover:text-xl hover:font-bold"
-                  >
-                    Sản phẩm
-                  </Link>
-                </li>
-                {/* <li>
-                  <Link
-                    className="text-white transition hover:text-white/75 hover:text-primary hover:text-xl hover:font-bold"
-                    to="/shop"
-                  >
-                    Cửa hàng
-                  </Link>
-                </li> */}
-                <li>
-                  <Link
-                    className="text-base text-white font-medium transition hover:text-primary hover:text-xl hover:font-bold"
-                    to="/news"
-                  >
-                    Tin tức
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="text-base text-white font-medium transition hover:text-primary hover:text-xl hover:font-bold"
-                    to="/contacts"
-                  >
-                    Liên hệ
-                  </Link>
-                </li>
-                {isAuthenticated && user?.role === "admin" && (
-                  <li>
-                    <Link
-                      className="text-gray-800 font-medium transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
-                      to="/maganeproduct"
-                    >
-                      Quản lý
-                    </Link>
-                  </li>
-                )}
-                {isAuthenticated &&
-                  (user?.role === "admin" || user?.role === "staff") && (
-                    <li>
-                      <Link
-                        className="text-white transition  hover:text-primary hover:text-xl hover:font-bold"
-                        to="/create-product"
-                      >
-                        Đăng sản phẩm
-                      </Link>
-                    </li>
-                  )}
+        <nav className="hidden md:block flex-1">
+          <ul className="flex items-center gap-6 text-sm">
+            <li>
+              <Link to="/" className="text-base text-white">
+                Trang chủ
+              </Link>
+            </li>
+            <li>
+              <Link to="/introductionAI" className="text-base text-white">
+                Giới thiệu
+              </Link>
+            </li>
+            <li>
+              <Link to="/recognize" className="text-base text-white">
+                Chuẩn đoán
+              </Link>
+            </li>
+            <li>
+              <Link to="/product" className="text-base text-white">
+                Sản phẩm
+              </Link>
+            </li>
+            <li>
+              <Link to="/news" className="text-base text-white">
+                Tin tức
+              </Link>
+            </li>
+            <li>
+              <Link to="/contacts" className="text-base text-white">
+                Liên hệ
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
-                {isAuthenticated &&
-                  (user?.role === "admin" || user?.role === "staff") && (
-                    <li>
-                      <Link
-                        className="text-white transition hover:text-xl hover:font-bold"
-                        to="/create-news"
-                      >
-                        Đăng bài viết
-                      </Link>
-                    </li>
-                  )}
-                {isAuthenticated &&
-                  (user?.role === "admin" ||
-                    user?.role === "staff" ||
-                    user?.role === "customer") && (
-                    <li>
-                      <Link
-                        className="text-gray-800 transition hover:text-gray-800/75 hover:text-primary hover:text-xl hover:font-bold"
-                        to="/create-news"
-                      >
-                        Quản lí cây trồng
-                      </Link>
-                    </li>
-                  )}
-              </ul>
-            </nav>
-
-            <div className="flex items-center gap-2">
-              {/* <span
-                onClick={() => setIsCartOpen(!isCartOpen)}
-                className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer pr-1"
+        <div className="flex items-center gap-2">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/shoppingcart"
+                className="text-gray-800 transition hover:text-primary"
               >
-              shopping cart
-                <BsBag fontSize={19}/>
-              </span> */}
-
-              {isAuthenticated ? (
-                <div className="sm:flex sm:gap-4 flex justify-center items-center">
-                  <Link
-                    to={"/shoppingcart"}
-                    onClick={() => setIsCartOpen(!isCartOpen)}
-                    className="text-gray-800 transition hover:text-gray-800/75 cursor-pointer pr-1"
-                  >
-                    <BsBag fontSize={19} />
-                  </Link>
-                  <Link
-                    to="/profile"
-                    className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-[#2f4550]/75 sm:block"
-                  >
-                    {user?.name || "Người dùng"}
-                  </Link>
-                  <span
-                    onClick={handleLogout}
-                    className="hidden cursor-pointer md:block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#226f29]"
-                  >
-                    Đăng xuất
-                  </span>
-                </div>
-              ) : (
-                <div className="sm:flex sm:gap-4 ">
-                  <Link
-                    to="/login"
-                    className=" block rounded-md px-5 py-2.5 text-sm font-medium text-white transition  bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
-                  >
-                    Đăng nhập
-                  </Link>
-                  <Link
-                    className="hidden rounded-md text-white bg-gray-100 px-5 py-2.5 text-sm font-medium  transition sm:block bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
-                    to="/register"
-                  >
-                    Đăng ký
-                  </Link>
-                </div>
-              )}
+                <BsBag fontSize={19} />
+              </Link>
+              <Dropdown menu={{ items: menuItems }}>
+                <Link
+                  to="/profile"
+                  className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-primary"
+                >
+                  {user?.name || "Người dùng"}
+                </Link>
+              </Dropdown>
+              <span
+                onClick={handleLogout}
+                className="cursor-pointer rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#226f29]"
+              >
+                Đăng xuất
+              </span>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/login"
+                className="rounded-md px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
+              >
+                Đăng nhập
+              </Link>
+              <Link
+                to="/register"
+                className="rounded-md px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300"
+              >
+                Đăng ký
+              </Link>
+            </div>
+          )}
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
   );
 };
 

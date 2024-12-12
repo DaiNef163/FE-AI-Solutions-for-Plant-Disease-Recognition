@@ -25,31 +25,48 @@ const CartPage = () => {
   const calculateTotalCost = (cart) => {
     let total = 0;
 
-    // Kiểm tra xem có sản phẩm trong giỏ hàng không
-    if (cart && cart.products && Array.isArray(cart.products)) {
-      cart.products.forEach((item) => {
-        // Kiểm tra nếu sản phẩm có thông tin hợp lệ
-        if (item.productId && item.productId.price && item.quantity) {
+    if (cart?.products && Array.isArray(cart.products)) {
+      total = cart.products.reduce((acc, item) => {
+        if (item.productId?.price && item.quantity) {
           const price = item.productId.price;
           const discount = item.productId.discount || 0; // Nếu không có giảm giá thì mặc định là 0
           const discountedPrice = price * (1 - discount / 100); // Tính giá sau giảm
-          total += discountedPrice * item.quantity;
+          return acc + discountedPrice * item.quantity;
         }
-      });
+        return acc;
+      }, 0);
     }
 
-    console.log("Total cost calculated: ", total); // Debug thông tin tổng tiền
     setTotalCost(total);
   };
+
   const navigate = useNavigate();
 
   const handleCheckout = async () => {
     const token = localStorage.getItem("tokenUser");
+    const address = document.getElementById("address").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!address || !phone) {
+      alert("Vui lòng nhập đầy đủ địa chỉ và số điện thoại.");
+      return;
+    }
+
+    if (!/^\d{10,15}$/.test(phone)) {
+      alert("Số điện thoại không hợp lệ.");
+      return;
+    }
+
     if (token) {
       try {
         const response = await axios.post(
           "/payment",
-          { totalCost: Math.round(totalCost), products: cart.products },
+          {
+            totalCost: Math.round(totalCost),
+            products: cart.products,
+            address,
+            phone,
+          },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -61,7 +78,7 @@ const CartPage = () => {
           await axios.delete("/carts/clear", {
             headers: { Authorization: `Bearer ${token}` },
           });
-          setCart(null)
+          setCart(null);
         } else {
           console.error("Không có URL hợp lệ:", response.data);
         }
@@ -71,67 +88,180 @@ const CartPage = () => {
     }
   };
 
+  const handleQuantityChange = (productId, delta) => {
+    const updatedCart = { ...cart };
+    updatedCart.products = updatedCart.products.map((item) => {
+      if (item.productId._id === productId) {
+        const newQuantity = item.quantity + delta;
+        if (newQuantity > 0) {
+          item.quantity = newQuantity;
+        }
+      }
+      return item;
+    });
+    setCart(updatedCart);
+    calculateTotalCost(updatedCart);
+  };
+
+  const handleRemoveItem = (productId) => {
+    const updatedCart = { ...cart };
+    updatedCart.products = updatedCart.products.filter(
+      (item) => item.productId._id !== productId
+    );
+    setCart(updatedCart);
+    calculateTotalCost(updatedCart);
+  };
+
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="w-4/5 mx-auto p-4">
       {cart ? (
-        <div className="flex flex-col">
-          <h1 className="text-3xl font-bold mb-4">Giỏ Hàng</h1>
-          <h2 className="text-2xl mb-2">Sản phẩm trong giỏ hàng:</h2>
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <ul>
-              {cart.products.map((item) =>
-                item.productId ? (
-                  <li
-                    key={item.productId._id}
-                    className="flex items-center mb-4"
-                  >
-                    <img
-                      className="w-24 h-24 object-cover mr-4"
-                      src={item.productId.images[0]}
-                      alt={item.productId.productName}
-                    />
-                    <div className="flex-grow">
-                      <p className="font-semibold">
-                        {item.productId.productName}
-                      </p>
-                      <p className="text-gray-500">
-                        Giá: {item.productId.price} VND
-                      </p>
-                      <p className="text-gray-500">
-                        Mô tả: {item.productId.description}
-                      </p>
-                      <p className="text-gray-500">
-                        Giảm giá: {item.productId.discount}%
-                      </p>
-                      <p>Số lượng: {item.quantity}</p>
+        <section className="h-screen bg-gray-200">
+          <div className="container mx-auto py-5 h-full">
+            <div className="flex justify-center items-center h-full">
+              <div className="w-full">
+                <div className="bg-white rounded-lg shadow-lg">
+                  <div className="p-6">
+                    <div className="flex flex-col lg:flex-row">
+                      {/* Products Section */}
+                      <div className="lg:w-1/2 p-5">
+                        <h3 className="mb-8 pt-2 text-center text-2xl font-bold uppercase">
+                          Giỏ hàng
+                        </h3>
+                        {cart?.products?.map((item) =>
+                          item.productId ? (
+                            <div
+                              className="flex items-center mb-6"
+                              key={item.productId._id}
+                            >
+                              {item.productId.images?.[0] && (
+                                <img
+                                  src={item.productId.images[0]}
+                                  className="w-24 h-24 object-cover rounded-lg"
+                                  alt={item.productId.productName || "Sản phẩm"}
+                                />
+                              )}
+                              <div className="ml-4 flex-grow">
+                                <div className="flex justify-between items-center">
+                                  <h5 className="text-lg font-semibold text-blue-600">
+                                    {item.productId.productName ||
+                                      "Tên sản phẩm không có"}
+                                  </h5>
+                                  <button
+                                    className="text-gray-500 hover:text-red-500"
+                                    onClick={() =>
+                                      handleRemoveItem(item.productId._id)
+                                    }
+                                  >
+                                    <i className="fas fa-times"></i>
+                                  </button>
+                                </div>
+                                {item.productId.discount !== undefined && (
+                                  <p className="text-sm text-gray-500">
+                                    Giảm giá: {item.productId.discount}%
+                                  </p>
+                                )}
+                                {item.productId.price && (
+                                  <div className="flex items-center mt-2">
+                                    <p className="text-lg font-bold mr-6">
+                                      {item.productId.price.toLocaleString()}{" "}
+                                      VND
+                                    </p>
+                                    <div className="flex items-center border border-gray-300 rounded-md">
+                                      <button
+                                        className="px-3 py-1 text-gray-600 hover:text-gray-800"
+                                        onClick={() =>
+                                          handleQuantityChange(
+                                            item.productId._id,
+                                            -1
+                                          )
+                                        }
+                                      >
+                                        -
+                                      </button>
+                                      <input
+                                        type="number"
+                                        value={item.quantity}
+                                        min="0"
+                                        className="w-12 text-center border-l border-r border-gray-300"
+                                        readOnly
+                                      />
+                                      <button
+                                        className="px-3 py-1 text-gray-600 hover:text-gray-800"
+                                        onClick={() =>
+                                          handleQuantityChange(
+                                            item.productId._id,
+                                            1
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ) : null
+                        )}
+
+                        <hr className="my-6 border-blue-600" />
+                        <div className="flex justify-between p-3 bg-amber-200 text-white rounded-md">
+                          <h5 className="font-semibold">Tổng tiền:</h5>
+                          <h5 className="font-semibold">
+                            {totalCost.toLocaleString()} VND
+                          </h5>
+                        </div>
+                      </div>
+
+                      {/* Payment Section */}
+                      <div className="lg:w-1/2 p-5 bg-gray-100 rounded-lg">
+                        <h3 className="mb-8 pt-2 text-center text-2xl font-bold uppercase">
+                          Thanh toán
+                        </h3>
+
+                        {/* Trường nhập Address */}
+                        <div className="mb-6">
+                          <label className="block text-gray-700 mb-2">
+                            Địa chỉ
+                          </label>
+                          <input
+                            type="text"
+                            id="address"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="123 Đường ABC, Thành phố XYZ"
+                            required
+                          />
+                        </div>
+
+                        {/* Trường nhập Phone */}
+                        <div className="mb-6">
+                          <label className="block text-gray-700 mb-2">
+                            Số điện thoại
+                          </label>
+                          <input
+                            type="text"
+                            id="phone"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="0123 456 789"
+                            pattern="[0-9]{10,15}"
+                            required
+                          />
+                        </div>
+
+                        <button
+                          onClick={handleCheckout}
+                          className="w-full py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 mt-16"
+                        >
+                          Thanh toán
+                        </button>
+                      </div>
                     </div>
-                  </li>
-                ) : (
-                  <li key={item.productId}>
-                    <p>Sản phẩm đã bị xóa</p>
-                  </li>
-                )
-              )}
-            </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold">
-              Tổng số sản phẩm:{" "}
-              {cart.products.reduce((total, item) => total + item.quantity, 0)}
-            </h3>
-            <h3 className="text-xl font-semibold mt-2">
-              Tổng tiền: {totalCost.toLocaleString()} VND
-            </h3>
-          </div>
-          <div className="mt-6 flex justify-center">
-            <button
-              onClick={handleCheckout}
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
-            >
-              Thanh toán
-            </button>
-          </div>
-        </div>
+        </section>
       ) : (
         <Page404 />
       )}
