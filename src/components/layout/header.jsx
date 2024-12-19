@@ -89,7 +89,7 @@ const Header = () => {
             </li>
             <li>
               <Link to="/recognize" className="text-base text-white">
-                Chuẩn đoán
+                Chẩn đoán
               </Link>
             </li>
             <li>

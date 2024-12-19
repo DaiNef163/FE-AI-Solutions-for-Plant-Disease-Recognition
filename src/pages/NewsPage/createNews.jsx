@@ -76,7 +76,7 @@ function CreateProduct() {
         style={{ maxWidth: 600, margin: "0 auto" }}
       >
         <Form.Item
-          label="Tiêu đề sản phẩm"
+          label="Tiêu đề bài viết"
           name="title"
           value={title}
           rules={[{ required: true, message: "Vui lòng nhập tiêu đề bài viết" }]}
