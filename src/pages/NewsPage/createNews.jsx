@@ -18,18 +18,18 @@ function CreateProduct() {
 
   const handleSubmit = async (values) => {
     if (!image) {
-      setError("Vui lòng chọn ảnh cho sản phẩm.");
+      setError("Vui lòng chọn ảnh cho bài viết.");
       notification.error({
         message: "Lỗi",
-        description: "Vui lòng chọn ảnh cho sản phẩm.",
+        description: "Vui lòng chọn ảnh cho bài viết.",
       });
       return;
     }
     if (!title || !description) {
-      setError("Vui lòng điền đầy đủ thông tin sản phẩm.");
+      setError("Vui lòng điền đầy đủ nội dung bài viết.");
       notification.error({
         message: "Lỗi",
-        description: "Vui lòng điền đầy đủ thông tin sản phẩm.",
+        description: "Vui lòng điền đầy đủ nội dung bài viết.",
       });
       return;
     }
@@ -52,14 +52,14 @@ function CreateProduct() {
       });
       notification.success({
         message: "Thành công",
-        description: "Sản phẩm đã được tạo thành công!",
+        description: "Bài viết đã được tạo thành công!",
       });
       console.log(response.data);
     } catch (err) {
-      setError("Tạo sản phẩm thất bại: " + err.response?.data?.message);
+      setError("Tạo bài viết thất bại: " + err.response?.data?.message);
       notification.error({
         message: "Lỗi",
-        description: "Tạo sản phẩm thất bại.",
+        description: "Tạo bài viết thất bại.",
       });
       console.error(err);
     }
@@ -67,7 +67,7 @@ function CreateProduct() {
 
   return (
     <div>
-      <h5 className="text-3xl font-bold text-center mb-4">Thông tin sản phẩm</h5>
+      <h5 className="text-3xl font-bold text-center mb-4">Thông tin bài viết</h5>
       <Form
         name="basic"
         onFinish={handleSubmit}
@@ -79,15 +79,15 @@ function CreateProduct() {
           label="Tiêu đề sản phẩm"
           name="title"
           value={title}
-          rules={[{ required: true, message: "Vui lòng nhập tiêu đề sản phẩm" }]}
+          rules={[{ required: true, message: "Vui lòng nhập tiêu đề bài viết" }]}
         >
           <Input onChange={(e) => setTitle(e.target.value)} />
         </Form.Item>
 
         <Form.Item
-          label="Mô tả sản phẩm"
+          label="Nội dung bài viết"
           name="description"
-          rules={[{ required: true, message: "Vui lòng nhập mô tả sản phẩm" }]}
+          rules={[{ required: true, message: "Vui lòng nhập nôi dung bài viết" }]}
         >
           <Input.TextArea
             rows={4}
@@ -96,7 +96,7 @@ function CreateProduct() {
         </Form.Item>
 
         <Form.Item
-          label="Ảnh sản phẩm"
+          label="Ảnh bài viết"
           valuePropName="fileList"
           getValueFromEvent={normFile}
         >
@@ -120,7 +120,7 @@ function CreateProduct() {
 
         <Form.Item className="flex justify-center items-center">
           <Button className="bg-primary" type="primary" htmlType="submit">
-            Đăng sản phẩm
+            Đăng bài viết
           </Button>
         </Form.Item>
       </Form>
