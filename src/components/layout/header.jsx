@@ -96,13 +96,8 @@ const Header = () => {
               </Link>
             </li>
             <li>
-<<<<<<< HEAD
-              <Link to="/recognize" className="text-lg font-medium text-white">
-                Chuẩn đoán
-=======
               <Link to="/recognize" className="text-base text-white">
                 Chẩn đoán
->>>>>>> d2d9e441fa2c824441f1da3f5bb6b9b2961e6c31
               </Link>
             </li>
             <li>
