@@ -9,7 +9,7 @@ const MaganeProduct = () => {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("/product/view")
+      .get("/product/maganeview")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Error fetching products:", error));
   }, []);

@@ -47,20 +47,22 @@ const Register = () => {
   };
 
   return (
-    <div className="animate-fade animate-once animate-duration-1000 animate-delay-100 bg-slate-600">
+    <div className="animate-fade animate-once animate-duration-1000 animate-delay-100 bg-backgroundPageGradient">
       <Row justify={"center"} style={{ marginTop: "30px" }}>
-        <Col xs={24} md={16} lg={8}>
+        <Col xs={32} md={16} lg={10}>
           <fieldset
             style={{
               padding: "15px",
               margin: "5px",
               border: "1px solid #ccc",
               borderRadius: "5px",
-              background:"white",
-              padding:"10px"
+              background: "white",
+              padding: "10px",
             }}
           >
-            <legend>Đăng Ký</legend>
+            <legend className="p-2 bg-gradient-to-r from-teal-400 to-blue-500 text-3xl font-medium text-transparent bg-clip-text z9">
+              Đăng Ký
+            </legend>
             <Form
               name="basic"
               onFinish={onFinish}
@@ -158,9 +160,9 @@ const Register = () => {
               </Form.Item>
 
               <Form.Item className="flex justify-center items-center">
-                <Button className="bg-primary" type="primary" htmlType="submit">
+                <button className="rounded-md px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300">
                   Đăng ký
-                </Button>
+                </button>
               </Form.Item>
             </Form>
             <Link className="flex justify-center items-center" to={"/"}>

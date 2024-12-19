@@ -9,7 +9,7 @@ const MaganePost = () => {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("/product/view")
+      .get("/post/viewpostUser")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
@@ -19,9 +19,9 @@ const MaganePost = () => {
 
   const columns = [
     {
-      title: "Tên sản phẩm",
-      dataIndex: "productName",
-      key: "productName",
+      title: "Tên bài viết",
+      dataIndex: "title",
+      key: "title",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -37,16 +37,12 @@ const MaganePost = () => {
       ),
     },
     {
-      title: "Giá",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => `${price} VND`,
-    },
-    {
-      title: "Mô tả",
+      title: "Nội dung",
       dataIndex: "description",
       key: "description",
+      render: (price) => `${price} VND`,
     },
+
     {
       title: "Hành động",
       key: "action",

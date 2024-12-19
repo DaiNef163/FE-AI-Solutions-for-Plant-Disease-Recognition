@@ -40,6 +40,7 @@ function CreateProduct() {
   }, []);
 
   const [productName, setProductName] = useState("");
+  const [tokenUser, setTokenUser] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [discount, setDiscount] = useState("");
@@ -77,6 +78,8 @@ function CreateProduct() {
     formData.append("accept", accept);
     formData.append("slug", slug);
     formData.append("nameLeaf", selectedNameLeaf);
+    formData.append("tokenUser", localStorage.tokenUser);
+console.log("...",localStorage.tokenUser);
 
     // Đảm bảo image là mảng và xử lý từng file
     if (Array.isArray(image) && image.length > 0) {

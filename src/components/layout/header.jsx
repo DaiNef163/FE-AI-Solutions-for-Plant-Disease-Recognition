@@ -16,6 +16,7 @@ const Header = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     localStorage.removeItem("tokenUser");
+    localStorage.removeItem("_id");
     setUser(null);
     setIsAuthenticated(false);
     navigate("/");
@@ -32,6 +33,10 @@ const Header = () => {
       items.push({
         key: "5",
         label: <Link to="/profile">Trang cá nhân</Link>,
+      }),
+      items.push({
+        key: "6",
+        label: <Link to="/profile/edit">Sửa trang cá nhân</Link>,
       });
     }
 
@@ -47,7 +52,7 @@ const Header = () => {
         }
       );
     }
-    if (user?.role === "admin") {
+    if (user?.role === "admin" || user?.role === "staff") {
       items.push(
         {
           key: "1",
@@ -55,7 +60,7 @@ const Header = () => {
         },
         {
           key: "2",
-          label: <Link to="/manage-news">Quản lí bài viết</Link>,
+          label: <Link to="/maganePost">Quản lí bài viết</Link>,
         }
       );
     }
@@ -66,7 +71,7 @@ const Header = () => {
   const menuItems = getMenuItems();
 
   return (
-    <header className="rounded-sm bg-backgroundPageGradient ">
+    <header className="rounded-sm bg-backgroundHeader ">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-8 px-4 sm:px-6 lg:px-10 ">
         <Link
           className="block text-teal-600 mt-1 animate-rotate-x animate-infinite animate-duration-[2000ms] animate-delay-1000"
@@ -78,58 +83,66 @@ const Header = () => {
         <nav className="hidden md:block flex-1">
           <ul className="flex items-center gap-6 text-sm">
             <li>
-              <Link to="/" className="text-base text-white">
+              <Link to="/" className="text-xl font-medium text-white">
                 Trang chủ
               </Link>
             </li>
             <li>
-              <Link to="/introductionAI" className="text-base text-white">
+              <Link
+                to="/introductionAI"
+                className="text-lg font-medium text-white"
+              >
                 Giới thiệu
               </Link>
             </li>
             <li>
-              <Link to="/recognize" className="text-base text-white">
+              <Link to="/recognize" className="text-lg font-medium text-white">
                 Chuẩn đoán
               </Link>
             </li>
             <li>
-              <Link to="/product" className="text-base text-white">
+              <Link to="/product" className="text-lg font-medium text-white">
                 Sản phẩm
               </Link>
             </li>
             <li>
-              <Link to="/news" className="text-base text-white">
+              <Link to="/news" className="text-lg font-medium text-white">
                 Tin tức
               </Link>
             </li>
             <li>
-              <Link to="/contacts" className="text-base text-white">
+              <Link to="/contacts" className="text-lg font-medium text-white">
                 Liên hệ
               </Link>
             </li>
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           {isAuthenticated ? (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center gap-4">
               <Link
                 to="/shoppingcart"
                 className="text-gray-800 transition hover:text-primary"
               >
-                <BsBag fontSize={19} />
+                <div>
+                  <div className="flex   items-center justify-center space-x-2">
+                    <BsBag fontSize={19} />
+                    <span>Giỏ hàng</span>
+                  </div>
+                </div>
               </Link>
               <Dropdown menu={{ items: menuItems }}>
                 <Link
                   to="/profile"
-                  className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-primary"
+                  className="rounded-md bg-gray-100 px-4 py-2.5 text-sm font-medium text-[#2f4550] transition hover:text-primary w-40"
                 >
                   {user?.name || "Người dùng"}
                 </Link>
               </Dropdown>
               <span
                 onClick={handleLogout}
-                className="cursor-pointer rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#226f29]"
+                className="cursor-pointer rounded-md bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#226f29]"
               >
                 Đăng xuất
               </span>

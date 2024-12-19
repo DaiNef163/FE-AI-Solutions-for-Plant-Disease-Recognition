@@ -63,7 +63,7 @@ const createUProductAPi = async (
   description,
   discount,
   images,
-  nameLeaf
+  nameLeaf,tokenUser
 ) => {
   try {
     const formData = new FormData();
@@ -73,6 +73,7 @@ const createUProductAPi = async (
     formData.append("description", description);
     formData.append("discount", discount);
     formData.append("nameLeaf", nameLeaf);
+    formData.append("tokenUser", tokenUser);
 
     if (images) {
       formData.append("images", images);

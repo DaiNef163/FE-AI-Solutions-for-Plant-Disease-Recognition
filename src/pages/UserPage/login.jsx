@@ -48,19 +48,22 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="bg-backgroundPageGradient animate-fade animate-once animate-duration-1000 animate-delay-100">
-      <Row justify={"center"} style={{ marginTop: "30px",padding:"20px" }}>
-        <Col xs={24} md={16} lg={8}>
+    <div className="bg-backgroundPageGradient animate-fade animate-once animate-duration-1000 animate-delay-100 shadow-inner">
+      <Row justify={"center"} style={{ marginTop: "30px", padding: "20px" }}>
+        <Col xs={24} md={16} lg={9}>
           <fieldset
             style={{
               padding: "15px",
               margin: "5px",
               border: "1px solid #ccc",
               borderRadius: "5px",
-              background:"white",
+              background: "white",
             }}
           >
-            <legend className="p-4 rounded-full text-3xl font-medium ">Đăng Nhập</legend>
+            <legend className="p-2 bg-gradient-to-r from-teal-400 to-blue-500 text-3xl font-medium text-transparent bg-clip-text z9">
+              Đăng Nhập
+            </legend>
+
             <Form
               name="basic"
               onFinish={onFinish}
@@ -98,9 +101,9 @@ const LoginPage = () => {
               </Form.Item>
 
               <Form.Item className="flex justify-center items-center">
-                <Button className="bg-primary" type="primary" htmlType="submit">
+                <button className="rounded-md px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300">
                   Đăng nhập
-                </Button>
+                </button>
               </Form.Item>
             </Form>
             <Link className="flex justify-center items-center" to={"/"}>

@@ -5,11 +5,11 @@ import Footer from "./components/layout/footer";
 export default function Layout() {
   return (
     <div className="flex flex-col min-h-screen animate-fade-down animate-once animate-duration-1000 ">
-      <Header /> 
-      <div className=" flex flex-col justify-center">
+      <Header />
+      <div className=" flex flex-col justify-center shadow-2xl">
         <Outlet />
       </div>
-      <Footer /> 
+      <Footer />
     </div>
   );
 }

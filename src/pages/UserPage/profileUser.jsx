@@ -32,10 +32,20 @@ const ProfileUser = () => {
                 "https://img.icons8.com/bubbles/100/000000/user.png"
               }
               alt="User-Profile-Image"
-              className="w-24 h-24 rounded-full mb-4"
+              className="w-28 h-28 rounded-full mb-4"
             />
-            <h6 className="text-lg font-bold">{user.name || "Unknown User"}</h6>
-            <p className="text-sm">{user.role || "User"}</p>
+            <h6 className="bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent font-extrabold text-2xl">
+              {user.name || "Unknown User"}
+            </h6>
+            <p className="text-sm bg-gradient-to-l from-gray-400 to-gray-700 bg-clip-text text-transparent font-extrabold">
+              {user.role === "customer"
+                ? "Khách Hàng"
+                : user.role === "staff"
+                ? "Nhân Viên"
+                : user.role === "admin"
+                ? "Admin"
+                : ""}
+            </p>
           </div>
           {/* Info Section */}
           <div className="w-2/3 p-6">

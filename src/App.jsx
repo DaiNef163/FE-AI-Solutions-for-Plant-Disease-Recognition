@@ -18,10 +18,14 @@ import ProductPage from "./pages/ProductPage/ProductPage";
 import ContactsPage from "./pages/ContactsPage/ContactsPage";
 import ProfileUser from "./pages/UserPage/profileUser";
 import RecognizePage from "./pages/RecognizePage/RecognizePage";
-import MaganeProduct from "./pages/AdminPage/maganeProduct";
 import EditProduct from "./pages/ProductPage/editProducts";
 import DeleteProduct from "./pages/ProductPage/deleteProduct";
 import IntroductionAI from "./pages/AI/introduction";
+import MaganeProduct from "./pages/AdminPage/maganeProduct";
+import MaganePost from "./pages/AdminPage/maganePost";
+import EditPost from "./pages/NewsPage/editProducts";
+import EditProfile from "./pages/UserPage/editProfile";
+
 
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
@@ -47,11 +51,14 @@ function App() {
                     <Route path="/create-product" element={<CreateProduct />} />
                     <Route path="/create-news" element={<CreateNews />} />
                     <Route path="/product/:productId" element={<ProductDetail />} />
-                    <Route path="/maganeProduct" element={<MaganeProduct />} />
-                    <Route path="/editproduct/:productId" element={<EditProduct />} />
                     <Route path="/deleteproduct/:productId" element={<DeleteProduct />} />
                     <Route path="/introductionAI" element={<IntroductionAI />} />
-                    
+                    <Route path="/maganeProduct" element={<MaganeProduct />} />
+                    <Route path="/maganePost" element={<MaganePost />} />
+                    <Route path="/editproduct/:productId" element={<EditProduct />} />
+                    <Route path="/editpost/:postId" element={<EditPost />} />
+                    <Route path="/profile/edit" element={<EditProfile />} />
+
                 </Route>
             </Routes>
         </UserContextProvider>

@@ -126,7 +126,7 @@ export default function ProductPage() {
                   {currentProducts.map((product) => (
                     <div
                       key={product._id}
-                      className="p-1 rounded-md bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+                      className="p-1 rounded-md bg-gradient-to-br from-teal-400 to-green-500"
                     >
                       <div className="flex h-full w-full items-center justify-center bg-white back">
                         <Link to={`/product/${product._id}`}>
