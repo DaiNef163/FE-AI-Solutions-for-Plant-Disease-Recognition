@@ -54,7 +54,7 @@ const ProfileUser = () => {
             </h6>
             <div className="grid grid-cols-3 justify-between mb-4 p-3">
               <div className="p-2">
-                <p className="text-gray-600 text-sm font-semibold">Tên</p>
+                <p className="text-gray-600 text-sm font-semibold">Họ và Tên</p>
                 <h6 className="text-gray-500 text-sm">{user.name || "N/A"}</h6>
               </div>
               <div className="p-2">

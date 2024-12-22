@@ -142,7 +142,7 @@ function Card({ images, title, description, onClick }) {
               onClick={handleToggle}
               className="text-green-600 cursor-pointer underline ml-1"
             >
-              {isExpanded ? " Show Less" : " Read More"}
+              {isExpanded ? " Show Less" : " Read More ."}
             </span>
           )}
         </p>
