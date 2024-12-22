@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const CartPage = () => {
   const [cart, setCart] = useState(null);
   const [totalCost, setTotalCost] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("tokenUser");
@@ -24,6 +25,7 @@ const CartPage = () => {
 
   const calculateTotalCost = (cart) => {
     let total = 0;
+    let discountAmount = 0;
 
     if (cart?.products && Array.isArray(cart.products)) {
       total = cart.products.reduce((acc, item) => {
@@ -31,13 +33,16 @@ const CartPage = () => {
           const price = item.productId.price;
           const discount = item.productId.discount || 0;
           const discountedPrice = price * (1 - discount / 100);
-          return acc + discountedPrice * item.quantity;
+          const itemTotal = discountedPrice * item.quantity;
+          discountAmount += (price - discountedPrice) * item.quantity; // Tính tổng số tiền giảm giá
+          return acc + itemTotal;
         }
         return acc;
       }, 0);
     }
 
     setTotalCost(total);
+    setDiscountAmount(discountAmount); // Lưu số tiền giảm giá
   };
 
   const navigate = useNavigate();
@@ -46,60 +51,56 @@ const CartPage = () => {
     const token = localStorage.getItem("tokenUser");
     const address = document.getElementById("address").value.trim();
     const phone = document.getElementById("phone").value.trim();
-  
+
     // Kiểm tra địa chỉ và số điện thoại
     if (!address || !phone) {
       alert("Vui lòng nhập đầy đủ địa chỉ và số điện thoại.");
       return;
     }
-  
+
     if (!/^\d{10,15}$/.test(phone)) {
       alert("Số điện thoại không hợp lệ.");
       return;
     }
-  
+
     // Kiểm tra dữ liệu giỏ hàng
     if (!cart?.products || cart.products.length === 0) {
       alert("Giỏ hàng của bạn không có sản phẩm.");
       return;
     }
-  
+
     // Kiểm tra token
     if (!token) {
       alert("Bạn chưa đăng nhập.");
       return;
     }
-  
+
     try {
       // Kiểm tra và chuẩn bị payload
       const payload = {
         totalCost: Math.round(totalCost),
         products: cart.products
-          .filter(item => item.productId && item.productId._id)  // Kiểm tra sản phẩm có `productId` và `_id`
-          .map(item => ({
+          .filter((item) => item.productId && item.productId._id) // Kiểm tra sản phẩm có `productId` và `_id`
+          .map((item) => ({
             productId: item.productId._id,
             quantity: item.quantity,
           })),
         address,
         phone,
       };
-  
+
       if (payload.products.length === 0) {
         alert("Giỏ hàng không có sản phẩm hợp lệ.");
         return;
       }
-  
-      const response = await axios.post(
-        "/payment",
-        payload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-  
+
+      const response = await axios.post("/payment", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       // Kiểm tra phản hồi và chuyển hướng
       if (response.data?.url) {
-        window.location.href = response.data.url;  // Điều hướng đến URL thanh toán
+        window.location.href = response.data.url; // Điều hướng đến URL thanh toán
         await axios.delete("/carts/clear", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -112,7 +113,28 @@ const CartPage = () => {
       alert("Đã xảy ra lỗi khi thanh toán. Vui lòng thử lại.");
     }
   };
-  
+
+  // Cập nhật số lượng sản phẩm trong giỏ hàng
+  const updateCartQuantity = async (productId, newQuantity) => {
+    const token = localStorage.getItem("tokenUser");
+    try {
+      const response = await axios.put(
+        "/carts/update",
+        {
+          productId,
+          quantity: newQuantity,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCart(response.data);  // Cập nhật giỏ hàng sau khi thay đổi
+      calculateTotalCost(response.data); // Cập nhật tổng tiền
+    } catch (error) {
+      console.error("Lỗi khi cập nhật giỏ hàng:", error);
+      alert("Không thể cập nhật số lượng sản phẩm.");
+    }
+  };
 
   const handleQuantityChange = (productId, delta) => {
     const updatedCart = { ...cart };
@@ -121,6 +143,7 @@ const CartPage = () => {
         const newQuantity = item.quantity + delta;
         if (newQuantity > 0) {
           item.quantity = newQuantity;
+          updateCartQuantity(item.productId._id, newQuantity);  // Cập nhật số lượng trên server
         }
       }
       return item;
@@ -231,11 +254,20 @@ const CartPage = () => {
                         )}
 
                         <hr className="my-6 border-blue-600" />
-                        <div className="flex justify-between p-3 text-white rounded-md bg-gradient-to-tl from-lime-200 via-sky-500 to-violet-500">
-                          <h5 className="font-semibold">Tổng tiền:</h5>
-                          <h5 className="font-semibold">
-                            {totalCost.toLocaleString()} VND
-                          </h5>
+                        <div className="">
+                          {" "}
+                          <div className="flex justify-between p-3 text-white rounded-md bg-gradient-to-tl from-lime-200 via-sky-500 to-[#b9f372] m-2">
+                            <h5 className="font-semibold">Giảm giá:</h5>
+                            <h5 className="font-semibold">
+                              {discountAmount.toLocaleString()} VND
+                            </h5>
+                          </div>
+                          <div className="flex justify-between p-3 text-white rounded-md bg-gradient-to-tl from-lime-200 via-sky-500 to-violet-500 m-2">
+                            <h5 className="font-semibold">Tổng tiền:</h5>
+                            <h5 className="font-semibold">
+                              {totalCost.toLocaleString()} VND
+                            </h5>
+                          </div>
                         </div>
                       </div>
 
@@ -281,15 +313,16 @@ const CartPage = () => {
                             type="text"
                             id="phone"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="0981234567"
+                            placeholder="0123456789"
                             required
                           />
                         </div>
 
+                        {/* Thanh toán */}
                         <div className="flex justify-center">
                           <button
-                            className="bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-700"
                             onClick={handleCheckout}
+                            className="px-10 py-3 rounded-lg bg-gradient-to-l from-sky-500 to-indigo-500 text-white font-semibold"
                           >
                             Thanh toán
                           </button>
