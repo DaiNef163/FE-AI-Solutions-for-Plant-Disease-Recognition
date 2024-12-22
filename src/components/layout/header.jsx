@@ -34,10 +34,10 @@ const Header = () => {
         key: "5",
         label: <Link to="/profile">Trang cá nhân</Link>,
       }),
-      items.push({
-        key: "6",
-        label: <Link to="/profile/edit">Sửa trang cá nhân</Link>,
-      });
+        items.push({
+          key: "6",
+          label: <Link to="/profile/edit">Sửa trang cá nhân</Link>,
+        });
     }
 
     if (user?.role === "admin" || user?.role === "staff") {
@@ -96,18 +96,18 @@ const Header = () => {
               </Link>
             </li>
             <li>
-<<<<<<< HEAD
-              <Link to="/recognize" className="text-lg font-medium text-white">
-                Chuẩn đoán
-=======
-              <Link to="/recognize" className="text-base text-white">
+              <Link to="/recognize" className="text-lg font-medium  text-white">
                 Chẩn đoán
->>>>>>> d2d9e441fa2c824441f1da3f5bb6b9b2961e6c31
               </Link>
             </li>
             <li>
               <Link to="/product" className="text-lg font-medium text-white">
                 Sản phẩm
+              </Link>
+            </li>
+            <li>
+              <Link to="/crop" className="text-lg font-medium text-white">
+                Quản lí cây trồng
               </Link>
             </li>
             <li>
