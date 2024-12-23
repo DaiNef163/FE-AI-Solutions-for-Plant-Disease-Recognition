@@ -16,7 +16,7 @@ const CreateIllnessPage = () => {
 
   const handleSubmit = async () => {
     if (!plantName || !quantity || !diseaseName || !sickDay || !plantDate) {
-      message.error("Vui lòng điền đầy đủ thông tin.");
+      message.error("Vui lòng điền đầy đủ thông tin. ");
       return;
     }
 
