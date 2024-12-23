@@ -28,6 +28,7 @@ import EditProfile from "./pages/UserPage/editProfile";
 import CropsTable from "./pages/Crop/CropsTable";
 import CropDetails from "./pages/Crop/cropDetails";
 import CreateIllnessPage from "./pages/Crop/CreateIllnessPage";
+import PaymentConfirmation from "./pages/Payment/PaymentConfirmation";
 
 axios.defaults.baseURL = "http://localhost:8080/";
 axios.defaults.withCredentials = true;
@@ -65,6 +66,8 @@ function App() {
           <Route path="/crop" element={<CropsTable />} />
           <Route path="/cropdetail/:cropId" element={<CropDetails />} />
           <Route path="/createillness" element={<CreateIllnessPage />} />
+          <Route path="/payment-confirmation" element={<PaymentConfirmation />} />
+
         </Route>
       </Routes>
     </UserContextProvider>
