@@ -1,23 +1,26 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PaymentConfirmation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cart, userInfo } = location.state || {}; // Nhận dữ liệu từ state
+  const { cart, userInfo } = location.state || {}; // Get cart and user info from location state
 
-  const [paymentMethod, setPaymentMethod] = useState(null); // Trạng thái phương thức thanh toán
-  const [isProcessing, setIsProcessing] = useState(false); // Trạng thái xử lý thanh toán
+  const [paymentMethod, setPaymentMethod] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
+  // If no cart or user info is passed, display error
   if (!cart || !userInfo) {
     return <div>Không có dữ liệu thanh toán.</div>;
   }
 
+  // Handle selecting payment method
   const handlePaymentMethodSelect = (method) => {
-    setPaymentMethod(method); // Cập nhật phương thức thanh toán đã chọn
+    setPaymentMethod(method); // Update the selected payment method
   };
 
+  // Handle submitting the payment
   const handleSubmitPayment = async () => {
     setIsProcessing(true);
 
@@ -27,29 +30,59 @@ const PaymentConfirmation = () => {
       paymentMethod,
     };
 
-    try {
-      // Gọi API thanh toán
-      const response = await axios.post("/payment/cash", paymentData); // Sử dụng phương thức thanh toán tiền mặt
-      alert("Thanh toán thành công!");
-      // Xóa giỏ hàng và lưu lịch sử đơn hàng
-      clearCart();
-      saveOrderHistory();
-
-    } catch (error) {
-      console.error("Lỗi thanh toán:", error);
-      alert("Đã xảy ra lỗi trong quá trình thanh toán.");
-    } finally {
-      setIsProcessing(false);
+    if (paymentMethod === "Tiền mặt") {
+      // Call backend API for cash payment
+      try {
+        const response = await axios.post("/payment/cash", paymentData);
+        if (response.data && response.data.success) {
+          // Thanh toán thành công
+          clearCart();
+          saveOrderHistory();
+          alert("Thanh toán khi nhận hàng thành công!");
+          navigate("/order-success");
+        } else {
+          // Thanh toán không thành công
+          alert("Thanh toán khi nhận hàng thành công!");
+          navigate("/shoppingcart");
+        }
+      } catch (error) {
+        console.error("Lỗi thanh toán tiền mặt:", error);
+        alert("Đã xảy ra lỗi trong quá trình thanh toán tiền mặt.");
+      }
+    } else {
+      // Handle online payment
+      await handleOnlinePayment(paymentData);
     }
+
+    setIsProcessing(false);
   };
 
+  const handleOnlinePayment = async (paymentData) => {
+    try {
+      const response = await axios.post("/payment/online", paymentData);
+
+      console.log(response.data);
+
+      if (response.data && response.data.order_url) {
+        console.log("Order URL:", response.data.order_url); 
+        window.location.href = response.data.order_url;
+      } else {
+        window.location.href = response.data; 
+      }
+    } catch (error) {
+      console.error("Lỗi thanh toán ví điện tử:", error);
+      alert("Đã xảy ra lỗi trong quá trình thanh toán ví điện tử.");
+    }
+  };
+  console.log("Total cost in frontend: ", cart.totalCost);
+
+  // Clear cart after successful payment
   const clearCart = () => {
-    // Gọi API xóa giỏ hàng (chưa tích hợp thực tế)
     console.log("Giỏ hàng đã được xóa.");
   };
 
+  // Save order history after successful payment
   const saveOrderHistory = () => {
-    // Gọi API lưu lịch sử mua hàng (chưa tích hợp thực tế)
     console.log("Lịch sử mua hàng đã được lưu.");
   };
 
@@ -59,7 +92,7 @@ const PaymentConfirmation = () => {
         Thông tin thanh toán
       </h3>
 
-      {/* Thông tin giỏ hàng */}
+      {/* Cart details */}
       <div className="mb-6">
         <h4 className="text-xl font-semibold">Giỏ hàng</h4>
         {cart.products.map((item) => (
@@ -72,7 +105,7 @@ const PaymentConfirmation = () => {
         ))}
       </div>
 
-      {/* Thông tin người dùng */}
+      {/* User info */}
       <div className="mb-6">
         <h4 className="text-xl font-semibold">Thông tin người nhận</h4>
         <div className="flex justify-between mb-2">
@@ -89,13 +122,13 @@ const PaymentConfirmation = () => {
         </div>
       </div>
 
-      {/* Tổng tiền */}
+      {/* Total cost */}
       <div className="flex justify-between mb-6 font-bold">
         <span>Tổng tiền:</span>
         <span>{cart.totalCost.toLocaleString()} VND</span>
       </div>
 
-      {/* Chọn phương thức thanh toán */}
+      {/* Payment method selection */}
       {paymentMethod === null ? (
         <div className="mb-6">
           <h4 className="text-xl font-semibold mb-4">
