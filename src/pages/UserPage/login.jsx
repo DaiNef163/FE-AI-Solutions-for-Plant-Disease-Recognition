@@ -23,6 +23,8 @@ const LoginPage = () => {
 
         setUser(res.user);
         setIsAuthenticated(true);
+        window.location.reload();
+        window.location.href = "/";
 
         console.log("Login successful:", res.user);
         notification.success({

@@ -97,7 +97,7 @@ const PaymentConfirmation = () => {
         <h4 className="text-xl font-semibold">Giỏ hàng</h4>
         {cart.products.map((item) => (
           <div key={item.productId._id} className="flex justify-between mb-4">
-            <span>{item.productId.productName}</span>
+            <span>{item.productId?.productName}</span>
             <span>
               {item.quantity} x {item.productId.price.toLocaleString()} VND
             </span>

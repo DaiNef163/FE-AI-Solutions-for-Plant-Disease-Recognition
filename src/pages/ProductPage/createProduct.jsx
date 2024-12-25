@@ -14,7 +14,6 @@ import {
 } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
-import { createUProductAPi } from "../../util/api";
 import TextArea from "antd/es/input/TextArea";
 import { UserContext } from "../../components/context/auth.context";
 import Page404 from "../page404/page404";
@@ -169,8 +168,8 @@ function CreateProduct() {
                   >
                     <InputNumber onChange={(value) => setPrice(value)} />
                   </Form.Item>
-                  <Form.Item label="số lượng" name="discount">
-                    <InputNumber onChange={(value) => setDiscount(value)} />
+                  <Form.Item label="số lượng" name="quantity">
+                    <InputNumber onChange={(value) => setQuantitys(value)} />
                   </Form.Item>
 
                   <Form.Item
