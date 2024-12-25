@@ -25,16 +25,17 @@ const DiseaseRecognition = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            setResult(response.data.prediction);
+            setResult(response.data);
         } catch (error) {
             console.error("Error during prediction:", error);
         }
     };
 
+    console.log(result);
     return (
-        <div className="flex flex-col items-center justify-center bg-backgroundPageGradient p-20">
-            <div className="w-96 bg-white shadow-md rounded-lg p-6 m-5">
-                <h1 className="text-2xl font-bold text-gray-700 text-center mb-6">Disease Recognition</h1>
+        <div className="flex flex-col items-center justify-center bg-backgroundPageGradient p-20 w-full">
+            <div className=" w-2/4 bg-white shadow-md rounded-lg p-6 m-5">
+                <h1 className="text-3xl font-bold text-gray-700 text-center mb-6">Chẩn đoán bệnh cho lá</h1>
 
                 <div className="mb-4">
                     <label
@@ -42,14 +43,14 @@ const DiseaseRecognition = () => {
                         className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100"
                     >
                         <MdDriveFolderUpload className="w-8 h-8" />
-                        <span className="text-gray-500">Drag and drop file here</span>
+                        <span className="text-gray-500 text-xl">Kéo và thả tập tin vào đây</span>
                     </label>
                     <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} />
                 </div>
 
                 {selectedFile && (
                     <div className="mb-4 text-center">
-                        <h2 className="text-gray-600 mb-2">Selected Image:</h2>
+                        <h2 className="text-gray-600 mb-2 text-2xl">Chọn ảnh:</h2>
                         <div className="flex justify-center">
                             <img
                                 src={URL.createObjectURL(selectedFile)}
@@ -62,22 +63,58 @@ const DiseaseRecognition = () => {
 
                 <div className="flex flex-col items-center gap-4 mt-4">
                     <button
-                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg w-full"
+                        className="bg-blue-500 hover:bg-blue-600 text-black py-2 px-4 rounded-lg text-2xl w-full font-semibold text-center"
                         onClick={handlePredict}
                     >
-                        Predict
+                        Chẩn đoán
                     </button>
-                    <label
-                        className={`py-2 px-4 rounded-lg w-full text-center font-semibold text-white ${
-                            result === "Không phải loại bệnh hoặc lá trong danh sách đã training"
-                                ? "bg-red-500"
-                                : result
-                                ? "bg-green-500"
-                                : "bg-gray-500 text-gray-600"
-                        }`}
-                    >
-                        {result || "No result yet"}
-                    </label>
+                    {result && (
+                        <>
+                            <label
+                                className={`py-2 px-4 rounded-lg w-full text-center text-2xl font-semibold text-black ${
+                                    result?.code == null
+                                        ? "bg-red-500"
+                                        : result?.severityLevel == "low"
+                                        ? "bg-green-600"
+                                        : result?.severityLevel == "moderate"
+                                        ? "bg-lime-400"
+                                        : result?.severityLevel == "high"
+                                        ? "bg-yellow-300"
+                                        : "bg-orange-500"
+                                }`}
+                            >
+                                {result?.name}
+                            </label>
+                            <img
+                                src="https://png.pngtree.com/png-vector/20220630/ourmid/pngtree-feedback-scale-rating-satisfaction-colored-png-image_5585845.png"
+                                alt=""
+                            />
+                            {result?.code != null && (
+                                <>
+                                    <label className={"bg-gray-200 text-xl  font-medium rounded-md px-2 w-full"}>
+                                        <p className={"text-red-500 font-medium text-2xl underline"}>Triệu chứng:</p>
+                                        {result?.symptoms}
+                                    </label>
+                                    <label className={"bg-gray-200 text-xl  font-medium rounded-md px-2 w-full"}>
+                                        <p className={"text-red-500 font-medium text-2xl underline"}>
+                                            Nguyên nhân bệnh:
+                                        </p>
+                                        {result?.causes}
+                                    </label>
+                                    <label className={"bg-gray-200 text-xl  font-medium rounded-md px-2 w-full"}>
+                                        <p className={"text-red-500 font-medium text-2xl underline"}>
+                                            Phương pháp điều trị:
+                                        </p>
+                                        {result?.treatment}
+                                    </label>
+                                    <label className={"bg-gray-200 text-xl  font-medium rounded-md px-2 w-full"}>
+                                        <p className={"text-red-500 font-medium text-2xl underline"}>Phòng ngừa:</p>
+                                        {result?.prevention}
+                                    </label>
+                                </>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
