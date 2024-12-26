@@ -1,21 +1,36 @@
 import { useState } from "react";
 import { MdDriveFolderUpload } from "react-icons/md";
 import axios from "axios";
+import { notification } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 
 const DiseaseRecognition = () => {
+    const navigate = useNavigate();
+
     const [selectedFile, setSelectedFile] = useState(null);
     const [result, setResult] = useState(null);
+    const tokenUser = localStorage.getItem("tokenUser");
 
     const handleFileChange = (event) => {
+        if (!tokenUser) {
+            notification.warning({
+                message: "Bạn chưa đăng nhập",
+                description: "Vui lòng đăng nhập để tiếp tục.",
+            });
+            navigate("/login");
+            return;
+        }
         setSelectedFile(event.target.files[0]);
     };
 
     const handlePredict = async () => {
         if (!selectedFile) {
-            alert("Please select a file first.");
+            notification.warning({
+                message: "Vui lòng chọn ảnh",
+                description: "Chọn ảnh để chẩn đoán bệnh của lá",
+            });
             return;
         }
-
         const formData = new FormData();
         formData.append("file", selectedFile);
 
@@ -31,7 +46,7 @@ const DiseaseRecognition = () => {
         }
     };
 
-    console.log(result);
+    console.log(tokenUser);
     return (
         <div className="flex flex-col items-center justify-center bg-backgroundPageGradient p-20 w-full">
             <div className=" w-2/4 bg-white shadow-md rounded-lg p-6 m-5">
