@@ -104,7 +104,7 @@ const DiseaseRecognition = () => {
                                 src="https://png.pngtree.com/png-vector/20220630/ourmid/pngtree-feedback-scale-rating-satisfaction-colored-png-image_5585845.png"
                                 alt=""
                             />
-                            {result?.code != null && (
+                            {result?.code != null && result?.severityLevel != "low" && (
                                 <>
                                     <label className={"bg-gray-200 text-xl  font-medium rounded-md px-2 w-full"}>
                                         <p className={"text-red-500 font-medium text-2xl underline"}>Triệu chứng:</p>
