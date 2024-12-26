@@ -141,9 +141,14 @@ export default function ProductPage() {
                                 <h1 className="text-orange-500 text-xl flex-shrink-0 font-bold">
                                   {product.productName}
                                 </h1>
-                                <p className="text-gray-600">
-                                  Giá: {product.price} VND
-                                </p>
+                                <div className="">
+                                  <p className="text-gray-600">
+                                    Giá: {product.price} VND
+                                  </p>
+                                  <p className="text-gray-600">
+                                    Số lượng: {product.quantity}
+                                  </p>
+                                </div>
                                 <p>
                                   <Rate allowHalf defaultValue={4.5} />
                                 </p>

@@ -14,7 +14,6 @@ import {
 } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
-import { createUProductAPi } from "../../util/api";
 import TextArea from "antd/es/input/TextArea";
 import { UserContext } from "../../components/context/auth.context";
 import Page404 from "../page404/page404";
@@ -42,6 +41,7 @@ function CreateProduct() {
   const [productName, setProductName] = useState("");
   const [tokenUser, setTokenUser] = useState("");
   const [price, setPrice] = useState("");
+  const [quantity, setQuantitys] = useState("");
   const [description, setDescription] = useState("");
   const [discount, setDiscount] = useState("");
   const [accept, setAccept] = useState(false);
@@ -59,7 +59,13 @@ function CreateProduct() {
       });
       return;
     }
-    if (!productName || !price || !description || !selectedNameLeaf) {
+    if (
+      !productName ||
+      !price ||
+      !description ||
+      !selectedNameLeaf ||
+      !quantity
+    ) {
       setError("Vui lòng điền đầy đủ thông tin sản phẩm.");
       notification.error({
         message: "Lỗi",
@@ -73,13 +79,14 @@ function CreateProduct() {
     const formData = new FormData();
     formData.append("productName", productName);
     formData.append("price", price);
+    formData.append("quantity", quantity);
     formData.append("description", description);
     formData.append("discount", discount);
     formData.append("accept", accept);
     formData.append("slug", slug);
     formData.append("nameLeaf", selectedNameLeaf);
     formData.append("tokenUser", localStorage.tokenUser);
-console.log("...",localStorage.tokenUser);
+    console.log("...", localStorage.tokenUser);
 
     // Đảm bảo image là mảng và xử lý từng file
     if (Array.isArray(image) && image.length > 0) {
@@ -161,8 +168,22 @@ console.log("...",localStorage.tokenUser);
                   >
                     <InputNumber onChange={(value) => setPrice(value)} />
                   </Form.Item>
+                  <Form.Item label="số lượng" name="quantity">
+                    <InputNumber onChange={(value) => setQuantitys(value)} />
+                  </Form.Item>
 
-                  <Form.Item label="Giảm giá (Nếu có)" name="discount">
+                  <Form.Item
+                    label="Giảm giá (Nếu có)"
+                    name="discount"
+                    rules={[
+                      {
+                        type: "number",
+                        min: 1,
+                        max: 100,
+                        message: "Giảm giá phải nằm trong khoảng từ 1 đến 100",
+                      },
+                    ]}
+                  >
                     <InputNumber onChange={(value) => setDiscount(value)} />
                   </Form.Item>
 

@@ -10,11 +10,11 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom"; // Import useParams
+import { useNavigate, useParams } from "react-router-dom"; // Import useParams
 
 const { TextArea } = Input;
-
 const EditProduct = () => {
+  const navigate = useNavigate();
   const { productId } = useParams(); // Get productId from URL params
   const [form] = Form.useForm();
   const [formData, setFormData] = useState({
@@ -91,6 +91,7 @@ const EditProduct = () => {
       .put(`/product/editproduct/${productId}`, payload)
       .then(() => {
         message.success("Cập nhật sản phẩm thành công!");
+        navigate("/maganeproduct");
       })
       .catch((error) => {
         message.error("Cập nhật sản phẩm thất bại!");
@@ -136,7 +137,7 @@ const EditProduct = () => {
           className="mb-4"
         >
           <InputNumber
-          placeholder={formData.discount}
+            placeholder={formData.discount}
             value={formData.discount}
             onChange={(value) => setFormData({ ...formData, discount: value })}
             className="p-3 border rounded-md w-full"
@@ -144,24 +145,32 @@ const EditProduct = () => {
         </Form.Item>
 
         <Form.Item label="Mô tả sản phẩm" name="description" className="mb-4">
-          <TextArea
-            value={formData.description}
-            rows={4}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            className="p-3 border rounded-md w-full"
-          />
-        </Form.Item>
+  <TextArea
+    placeholder="Mô tả sản phẩm"
+    value={formData.description}
+    rows={4}
+    onChange={(e) =>
+      setFormData({ ...formData, description: e.target.value })
+    }
+    className="p-3 border rounded-md w-full overflow-hidden text-ellipsis"
+    style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
+  />
+</Form.Item>
+
 
         <Form.Item label="Loại lá" name="nameLeaf" className="mb-4">
           <Select
             value={formData.nameLeaf}
+            placeholder="Chọn loại lá" // Set the placeholder to a string
             onChange={(value) => setFormData({ ...formData, nameLeaf: value })}
-            className="w-full p-3 border rounded-md"
+            className="w-full border rounded-md"
           >
             {nameLeafList.map((leaf) => (
-              <Select.Option key={leaf} value={leaf}>
+              <Select.Option
+                key={leaf}
+                value={leaf}
+                placeholder={formData.nameLeaf.value}
+              >
                 {leaf}
               </Select.Option>
             ))}
@@ -174,7 +183,7 @@ const EditProduct = () => {
             fileList={image}
             beforeUpload={(file) => {
               setImage((prevImages) => [...prevImages, file]);
-              return false; // Prevent auto-upload
+              return false;
             }}
             onRemove={(file) => {
               setImage((prevImages) =>

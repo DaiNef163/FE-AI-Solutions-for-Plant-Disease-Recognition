@@ -19,35 +19,45 @@ const Header = () => {
     localStorage.removeItem("_id");
     setUser(null);
     setIsAuthenticated(false);
-    navigate("/");
+    window.location.reload();
+    window.location.href = "/";
   };
 
   const getMenuItems = () => {
     const items = [];
 
+    // if (
+    //   user?.role === "admin" ||
+    //   user?.role === "staff" ||
+    //   user?.role === "customer"
+    // ) {
+    //   items.push({
+    //     key: "5",
+    //     label: <Link to="/profile">Trang cá nhân</Link>,
+    //   }),
+    //     items.push({
+    //       key: "6",
+    //       label: <Link to="/profile/edit">Sửa trang cá nhân</Link>,
+    //     });
+    // }
     if (
       user?.role === "admin" ||
       user?.role === "staff" ||
       user?.role === "customer"
     ) {
       items.push({
-        key: "5",
-        label: <Link to="/profile">Trang cá nhân</Link>,
-      }),
-        items.push({
-          key: "6",
-          label: <Link to="/profile/edit">Sửa trang cá nhân</Link>,
-        });
+        key: "1",
+        label: <Link to="/HistoryOrder">Lịch sử mua hàng</Link>,
+      });
     }
-
     if (user?.role === "admin" || user?.role === "staff") {
       items.push(
         {
-          key: "3",
+          key: "2",
           label: <Link to="/create-news">Đăng bài viết</Link>,
         },
         {
-          key: "4",
+          key: "3",
           label: <Link to="/create-product">Đăng sản phẩm</Link>,
         }
       );
@@ -55,14 +65,24 @@ const Header = () => {
     if (user?.role === "admin" || user?.role === "staff") {
       items.push(
         {
-          key: "1",
+          key: "4",
           label: <Link to="/maganeproduct">Quản lí sản phẩm</Link>,
         },
         {
-          key: "2",
+          key: "5",
           label: <Link to="/maganePost">Quản lí bài viết</Link>,
         }
       );
+    }
+    if (user?.role === "admin") {
+      items.push({
+        key: "6",
+        label: <Link to="/maganeUser">Quản lí Người dùng</Link>,
+      });
+      items.push({
+        key: "7",
+        label: <Link to="/maganeTreament">Quản lí Treatment</Link>,
+      });
     }
 
     return items;

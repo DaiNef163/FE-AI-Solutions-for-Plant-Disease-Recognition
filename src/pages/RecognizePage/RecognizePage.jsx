@@ -25,11 +25,15 @@ const DiseaseRecognition = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            setResult(response.data.prediction);
+
+            // Update result with the entire API response
+            setResult(response.data);
         } catch (error) {
             console.error("Error during prediction:", error);
         }
     };
+
+    console.log(result);
 
     return (
         <div className="flex flex-col items-center justify-center bg-backgroundPageGradient p-20">
@@ -67,17 +71,22 @@ const DiseaseRecognition = () => {
                     >
                         Predict
                     </button>
-                    <label
-                        className={`py-2 px-4 rounded-lg w-full text-center font-semibold text-white ${
-                            result === "Không phải loại bệnh hoặc lá trong danh sách đã training"
-                                ? "bg-red-500"
-                                : result
-                                ? "bg-green-500"
-                                : "bg-gray-500 text-gray-600"
-                        }`}
-                    >
-                        {result || "No result yet"}
-                    </label>
+                    {result && (
+                        <>
+                            <label
+                                className={`py-2 px-4 rounded-lg w-full text-center font-semibold text-white ${
+                                    result?.id == null ? "bg-red-500" : "bg-green-500"
+                                }`}
+                            >
+                                {result.name}
+                            </label>
+                            {result.id != null && (
+                                <label className={"bg-gray-300 rounded-md px-2"}>
+                                    Phương pháp điều trị: {result.treatment}
+                                </label>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
