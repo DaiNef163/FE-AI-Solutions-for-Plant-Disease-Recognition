@@ -1,268 +1,232 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Col,
-  Divider,
-  Form,
-  Input,
-  InputNumber,
-  notification,
-  Row,
-  Select,
-  Upload,
-} from "antd";
+import { UserContext } from "../../components/context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import { Card, Button, Form, Input, InputNumber, Select, message, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { UserContext } from "../../components/context/auth.context";
-import Page404 from "../page404/page404";
 import axios from "axios";
 
-function CreateProduct() {
+const CreateProduct = () => {
   const { user, isAuthenticated } = useContext(UserContext);
-  const normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
   const navigate = useNavigate();
+  const [form] = Form.useForm();
 
+  const [loading, setLoading] = useState(false);
   const [nameLeafList, setNameLeafList] = useState([]);
-  const [selectedNameLeaf, setSelectedNameLeaf] = useState(""); // For the selected leaf type
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+
   useEffect(() => {
-    axios
-      .get("/leaf/nameLeaf")
-      .then((response) => setNameLeafList(response.data))
-      .catch((error) => console.error("Error fetching name leaf:", error));
+    const fetchLeafTypes = async () => {
+      try {
+        const response = await axios.get("/leaf/nameLeaf");
+        setNameLeafList(response.data);
+      } catch (error) {
+        console.error("Error fetching leaf types:", error);
+        message.error("Không thể tải danh sách loại lá");
+      }
+    };
+
+    fetchLeafTypes();
   }, []);
 
-  const [productName, setProductName] = useState("");
-  const [tokenUser, setTokenUser] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantitys] = useState("");
-  const [description, setDescription] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [accept, setAccept] = useState(false);
-  const [slug, setSlug] = useState("");
-  const [image, setImage] = useState([]);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const removeImage = (index) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = async (values) => {
-    if (image.length === 0) {
-      setError("Vui lòng chọn ảnh cho sản phẩm.");
-      notification.error({
-        message: "Lỗi",
-        description: "Vui lòng chọn ảnh cho sản phẩm.",
-      });
-      return;
-    }
-    if (
-      !productName ||
-      !price ||
-      !description ||
-      !selectedNameLeaf ||
-      !quantity
-    ) {
-      setError("Vui lòng điền đầy đủ thông tin sản phẩm.");
-      notification.error({
-        message: "Lỗi",
-        description: "Vui lòng điền đầy đủ thông tin sản phẩm.",
-      });
+    if (!imageFiles.length) {
+      message.error("Vui lòng chọn ít nhất một ảnh");
       return;
     }
 
-    setError(null);
+    setLoading(true);
 
     const formData = new FormData();
-    formData.append("productName", productName);
-    formData.append("price", price);
-    formData.append("quantity", quantity);
-    formData.append("description", description);
-    formData.append("discount", discount);
-    formData.append("accept", accept);
-    formData.append("slug", slug);
-    formData.append("nameLeaf", selectedNameLeaf);
-    formData.append("tokenUser", localStorage.tokenUser);
-    console.log("...", localStorage.tokenUser);
+    Object.keys(values).forEach(key => {
+      formData.append(key, values[key]);
+    });
 
-    if (Array.isArray(image) && image.length > 0) {
-      image.forEach((file) => {
-        formData.append("images", file);
-      });
-    }
+    imageFiles.forEach(file => {
+      formData.append('images', file);
+    });
 
     const token = localStorage.getItem("tokenUser");
+    formData.append("tokenUser", token);
 
     try {
-      const response = await axios.post("/product/create", formData, {
+      await axios.post("/product/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
-        },
+        }
       });
-      setSuccess("Sản phẩm đã được tạo thành công!");
-      notification.success({
-        message: "Thành công",
-        description: "Sản phẩm đã được tạo thành công!",
-      });
+      message.success("Tạo sản phẩm thành công!");
       navigate("/product");
-      console.log(response.data);
-    } catch (err) {
-      setError("Tạo sản phẩm thất bại: " + err.response?.data?.message);
-      notification.error({
-        message: "Lỗi",
-        description: "Tạo sản phẩm thất bại.",
-      });
-      console.error(err);
+    } catch (error) {
+      console.error("Error creating product:", error);
+      message.error("Tạo sản phẩm thất bại");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (!isAuthenticated || (user?.role !== "admin" && user?.role !== "staff")) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <Card className="w-96 shadow-md">
+          <h2 className="text-2xl font-bold text-red-600">Không có quyền truy cập</h2>
+          <p className="mt-2">Bạn cần đăng nhập với quyền admin hoặc staff.</p>
+          <Link to="/" className="mt-4 text-blue-600 hover:underline inline-block">
+            Về trang chủ
+          </Link>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      {isAuthenticated && (user?.role === "admin" || user?.role === "staff") ? (
-        <div className="w-3/5 m-auto">
-          <h5 className="text-3xl font-bold text-center bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-wrap bg-clip-text text-transparent ">
-            Thông tin sản phẩm
-          </h5>
-          <Row justify={"space-between"} style={{}}>
-            <Col className="" xs={24} md={16} lg={8}>
-              <fieldset
-                style={{
-                  padding: "15px",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  width: "1080px",
-                }}
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-4xl mx-auto">
+        <Card 
+          title={
+            <h1 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500">
+              Tạo Sản Phẩm Mới
+            </h1>
+          }
+          className="shadow-md"
+        >
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            className="mt-4"
+          >
+            <Form.Item
+              label="Tên sản phẩm"
+              name="productName"
+              rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm' }]}
+            >
+              <Input className="rounded" />
+            </Form.Item>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Form.Item
+                label="Giá tiền"
+                name="price"
+                rules={[{ required: true, message: 'Vui lòng nhập giá tiền' }]}
               >
-                <legend>Thông tin sản phẩm</legend>
-                <Form
-                  name="basic"
-                  onFinish={handleSubmit}
-                  autoComplete="off"
-                  layout="vertical"
-                  type="primary"
-                >
-                  <Form.Item
-                    label="Tên sản phẩm"
-                    name="productName"
-                    value={productName}
-                    rules={[{ required: true, message: "Nhập tên sản phẩm" }]}
-                  >
-                    <Input onChange={(e) => setProductName(e.target.value)} />
-                  </Form.Item>
+                <InputNumber
+                  className="w-full rounded"
+                  formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                />
+              </Form.Item>
 
-                  <Form.Item
-                    label="Giá tiền"
-                    name="price"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập giá tiền" },
-                    ]}
-                  >
-                    <InputNumber onChange={(value) => setPrice(value)} />
-                  </Form.Item>
-                  <Form.Item label="số lượng" name="quantity">
-                    <InputNumber onChange={(value) => setQuantitys(value)} />
-                  </Form.Item>
+              <Form.Item
+                label="Số lượng"
+                name="quantity"
+                rules={[{ required: true, message: 'Vui lòng nhập số lượng' }]}
+              >
+                <InputNumber className="w-full rounded" min={0} />
+              </Form.Item>
+            </div>
 
-                  <Form.Item
-                    label="Giảm giá (Nếu có)"
-                    name="discount"
-                    rules={[
-                      {
-                        type: "number",
-                        min: 1,
-                        max: 100,
-                        message: "Giảm giá phải nằm trong khoảng từ 1 đến 100",
-                      },
-                    ]}
-                  >
-                    <InputNumber onChange={(value) => setDiscount(value)} />
-                  </Form.Item>
+            <Form.Item
+              label="Giảm giá (%)"
+              name="discount"
+            >
+              <InputNumber
+                className="w-full rounded"
+                min={0}
+                max={100}
+              />
+            </Form.Item>
 
-                  <Form.Item label="Mô tả sản phẩm" name="description">
-                    <TextArea
-                      rows={4}
-                      onChange={(e) => setDescription(e.target.value)}
+            <Form.Item
+              label="Loại lá"
+              name="nameLeaf"
+              rules={[{ required: true, message: 'Vui lòng chọn loại lá' }]}
+            >
+              <Select className="w-full">
+                <Select.Option value="">Chọn loại lá</Select.Option>
+                {nameLeafList.map((leaf) => (
+                  <Select.Option key={leaf} value={leaf}>
+                    {leaf}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="Mô tả"
+              name="description"
+              rules={[{ required: true, message: 'Vui lòng nhập mô tả sản phẩm' }]}
+            >
+              <TextArea rows={4} className="rounded" />
+            </Form.Item>
+
+            <Form.Item label="Hình ảnh sản phẩm">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {imagePreviews.map((url, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={url}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-32 object-cover rounded border border-gray-200"
                     />
-                  </Form.Item>
-
-                  <Form.Item label="Loại lá" name="nameLeaf">
-                    <Select onChange={(value) => setSelectedNameLeaf(value)}>
-                      {Array.isArray(nameLeafList) &&
-                      nameLeafList.length > 0 ? (
-                        nameLeafList.map((leaf) => (
-                          <Select.Option key={leaf} value={leaf}>
-                            {leaf}
-                          </Select.Option>
-                        ))
-                      ) : (
-                        <Select.Option disabled>
-                          No data available
-                        </Select.Option>
-                      )}
-                    </Select>
-                  </Form.Item>
-
-                  <div className=" flex justify-center items-center">
-                    <Form.Item
-                      label="Ảnh sản phẩm"
-                      valuePropName="fileList"
-                      getValueFromEvent={normFile}
-                    >
-                      <Upload
-                        listType="picture-card"
-                        className="p-2 border-2 border-dashed"
-                        beforeUpload={(file) => {
-                          setImage((prevImages) => [...prevImages, file]); // Chắc chắn rằng image luôn là một mảng
-                          return false; // Ngừng việc upload tự động
-                        }}
-                        onRemove={(file) => {
-                          setImage((prevImages) =>
-                            prevImages.filter((item) => item.uid !== file.uid)
-                          ); // Xóa ảnh khi người dùng xóa
-                        }}
-                        multiple // Cho phép chọn nhiều ảnh
-                      >
-                        <button
-                          className="bg-transparent border-0 hover:bg-gray-200 p-2"
-                          type="button"
-                        >
-                          <PlusOutlined />
-                          <div className="mt-2 text-sm">Upload</div>
-                        </button>
-                      </Upload>
-                    </Form.Item>
-                  </div>
-
-                  <Form.Item className="flex justify-center items-center ">
                     <Button
-                      className="bg-primary"
                       type="primary"
-                      htmlType="submit"
-                    >
-                      Đăng sản phẩm
-                    </Button>
-                  </Form.Item>
-                </Form>
-                <Link
-                  className="flex justify-center items-center"
-                  to={"/product"}
+                      danger
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      icon={<span className="text-xl">×</span>}
+                    />
+                  </div>
+                ))}
+                <Upload
+                  listType="picture-card"
+                  showUploadList={false}
+                  beforeUpload={(file) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setImageFiles(prev => [...prev, file]);
+                      setImagePreviews(prev => [...prev, reader.result]);
+                    };
+                    reader.readAsDataURL(file);
+                    return false;
+                  }}
+                  multiple
                 >
-                  <ArrowLeftOutlined /> Quay lại trang sản phẩm
-                </Link>
-                <Divider />
-              </fieldset>
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <Page404 />
-      )}
+                  <div className="text-center">
+                    <PlusOutlined className="text-2xl" />
+                    <div className="mt-2">Thêm ảnh</div>
+                  </div>
+                </Upload>
+              </div>
+            </Form.Item>
+
+            <div className="flex justify-between mt-8">
+              <Link to="/product">
+                <Button icon={<ArrowLeftOutlined />}>
+                  Quay lại
+                </Button>
+              </Link>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                className="bg-blue-600"
+              >
+                {loading ? 'Đang xử lý...' : 'Tạo sản phẩm'}
+              </Button>
+            </div>
+          </Form>
+        </Card>
+      </div>
     </div>
   );
-}
+};
 
 export default CreateProduct;

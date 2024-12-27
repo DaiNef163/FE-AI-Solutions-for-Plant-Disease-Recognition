@@ -94,7 +94,7 @@ const Header = () => {
     <header className="rounded-sm bg-backgroundHeader ">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-8 px-4 sm:px-6 lg:px-10 ">
         <Link
-          className="block text-teal-600 mt-1 animate-rotate-x animate-infinite animate-duration-[2000ms] animate-delay-1000"
+          className="block text-teal-600 animate-rotate-x animate-infinite animate-duration-[2000ms] animate-delay-1000"
           to="/"
         >
           <BiSolidLeaf fontSize={60} />

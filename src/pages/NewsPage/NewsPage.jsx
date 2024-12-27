@@ -31,7 +31,7 @@ const NewsPage = () => {
   if (error) return <div className="text-red-600 text-center mt-4">{error}</div>;
 
   return (
-    <div className=" bg-gray-50 min-h-screen">
+    <div className=" bg-gray-50 min-h-screen max-w-7xl m-auto">
       {selectedPost ? (
         <SelectedPost selectedPost={selectedPost} setSelectedPost={setSelectedPost} /> // Hiển thị bài viết đã chọn
       ) : (

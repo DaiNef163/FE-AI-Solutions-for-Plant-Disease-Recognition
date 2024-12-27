@@ -115,20 +115,17 @@ const CartPage = () => {
     });
   };
 
-
   const handleRemoveItem = async (productId) => {
     try {
       const response = await axios.delete(`/carts/remove-item/${productId}`);
       setCart(response.data.cart); // Cập nhật giỏ hàng sau khi xóa sản phẩm
     } catch (error) {
-      console.error('Lỗi khi xóa sản phẩm:', error);
+      console.error("Lỗi khi xóa sản phẩm:", error);
     }
   };
-  
-  
 
   return (
-    <div className="w-4/5 mx-auto p-4">
+    <div className="w-4/5 mx-auto p-4 mt-5">
       {cart ? (
         <section className="h-screen bg-gray-50">
           <div className="lg:flex lg:space-x-4 space-y-4 lg:space-y-0">
@@ -143,7 +140,7 @@ const CartPage = () => {
           </div>
         </section>
       ) : (
-        <Page404 />
+        ""
       )}
     </div>
   );

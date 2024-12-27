@@ -13,7 +13,11 @@ const CropsPage = () => {
       .then((response) => setCrops(response.data))
       .catch((error) => console.error("Error fetching crops:", error));
   }, []);
-
+  const statusMapping = {
+    healthy: "Cây trồng khỏe mạnh",
+    sick: "Cây đang bị bệnh",
+    recovered: "Cây đã khỏi bệnh",
+  };
   const columns = [
     {
       title: "Tên cây trồng",
@@ -29,6 +33,7 @@ const CropsPage = () => {
       title: "Tình trạng",
       dataIndex: "status",
       key: "status",
+      render: (text) => statusMapping[text] || "Không rõ",
     },
     {
       title: "Ngày trồng",

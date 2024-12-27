@@ -10,7 +10,7 @@ export default {
       backgroundImage: {
         backgroundPageGradient:
           "linear-gradient(to right, rgba(81, 228, 206, 0.7) 5%, rgba(183, 244, 235, 0.7) 60%)",
-        backgroundHeader: "linear-gradient(to right, #51E4CE 5%, #B7F4EB 60%)",
+        backgroundHeader: "linear-gradient(to right, #51E4CE 10%, #B7F4EB 75%)",
       },
       backgroundPageProduct:
         "linear-gradient(to right, #2DD4BF 5%, #53E5CF 60%, #ffffff 95%)",

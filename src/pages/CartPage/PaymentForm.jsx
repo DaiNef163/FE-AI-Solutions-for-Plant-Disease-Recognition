@@ -15,8 +15,10 @@ const PaymentForm = ({ handleCheckout }) => {
   };
 
   return (
-    <div className="lg:w-1/2 p-5 bg-gray-100 rounded-lg">
-      <h3 className="mb-8 pt-2 text-center text-2xl font-bold uppercase">Thanh toán</h3>
+    <div className="lg:w-1/2 p-5 bg-gray-100 rounded-lg mr-3">
+      <h3 className="mb-8 pt-2 text-center text-2xl font-bold uppercase">
+        Thanh toán
+      </h3>
 
       <div className="mb-6">
         <label className="block text-gray-700 mb-2">Họ và tên</label>
@@ -63,7 +65,7 @@ const PaymentForm = ({ handleCheckout }) => {
       <div className="flex justify-center">
         <button
           onClick={handleSubmit}
-          className="px-10 py-3 rounded-lg bg-gradient-to-l from-sky-500 to-indigo-500 text-white font-semibold"
+          className="px-10 py-3 rounded-lg bg-gradient-to-l  from-teal-300 to-blue-400 text-white font-semibold"
         >
           Thanh toán
         </button>

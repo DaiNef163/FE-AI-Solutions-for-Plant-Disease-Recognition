@@ -1,98 +1,104 @@
 import React from "react";
+import { Trash2 } from "lucide-react";
 
 const CartItems = ({
   cart,
   handleRemoveItem,
   handleQuantityChange,
-  discountAmount,
   totalCost,
 }) => {
   return (
-    <div className="lg:w-1/2 p-5">
-      <h3 className="mb-8 pt-2 text-center text-2xl font-bold uppercase">
-        Giỏ hàng
+    <div className="lg:w-1/2 p-6">
+      <h3 className="mb-8 text-center text-3xl font-bold text-gray-800">
+        Giỏ hàng của bạn
       </h3>
-      {cart?.products?.map((item) =>
-        item.productId ? (
-          <div
-            className="flex items-center mb-6 shadow-xl"
-            key={item.productId._id}
-          >
-            {item.productId.images?.[0] && (
-              <img
-                src={item.productId.images[0]}
-                className="w-24 h-24 object-cover rounded-lg"
-                alt={item.productId.productName || "Sản phẩm"}
-              />
-            )}
-            <div className="ml-4 flex-grow">
-              <div className="flex justify-between items-center">
-                <h5 className="text-lg font-semibold text-blue-600">
-                  {item.productId.productName || "Tên sản phẩm không có"}
-                </h5>
-              </div>
-              {item.productId.discount !== undefined && (
-                <p className="text-sm text-gray-500">
-                  Giảm giá: {item.productId.discount}%
-                </p>
-              )}
-              {item.productId?.price && (
-                <div className="flex items-center mt-2">
-                  <p className="text-lg font-bold mr-6">
-                    {item.productId?.price.toLocaleString()} VND
-                  </p>
-                  <div className="flex items-center border border-gray-300 rounded-md">
-                    <button
-                      className="px-3 py-1 text-gray-600 hover:text-gray-800"
-                      onClick={() =>
-                        handleQuantityChange(item?.productId._id, -1)
-                      }
-                    >
-                      -
-                    </button>
-                    <input
-                      type="number"
-                      value={item?.quantity}
-                      min="0"
-                      className="w-12 text-center border-l border-r border-gray-300"
-                      readOnly
-                    />
-                    <button
-                      className="px-3 py-1 text-gray-600 hover:text-gray-800"
-                      onClick={() =>
-                        handleQuantityChange(item.productId._id, 1)
-                      }
-                    >
-                      +
-                    </button>
-                    {/* Nút xóa sản phẩm */}
-                    <button
-                      className="ml-3 px-3 py-1 text-red-600 hover:text-red-800"
-                      onClick={() => handleRemoveItem(item?.productId._id)}
-                    >
-                      <i className="fas fa-trash"></i> Xóa
-                    </button>
+      
+      <div className="space-y-6">
+        {cart?.products?.map((item) =>
+          item.productId ? (
+            <div
+              className="bg-white rounded-xl shadow-lg p-4 transition-all duration-300 hover:shadow-xl"
+              key={item.productId._id}
+            >
+              <div className="flex gap-4">
+                {item.productId.images?.[0] && (
+                  <img
+                    src={item.productId.images[0]}
+                    className="w-32 h-32 object-cover rounded-lg"
+                    alt={item.productId.productName || "Sản phẩm"}
+                  />
+                )}
+                
+                <div className="flex-grow space-y-3">
+                  <div className="flex justify-between items-start">
+                    <h5 className="text-lg font-semibold text-gray-800">
+                      {item.productId.productName || "Tên sản phẩm không có"}
+                    </h5>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <p className="text-lg font-bold text-blue-600">
+                      {item.productId?.price?.toLocaleString()} VND
+                    </p>
+
+                    <div className="flex items-center">
+                      <div className="flex items-center bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                        <button
+                          className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                          onClick={() => handleQuantityChange(item?.productId._id, -1)}
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          value={item?.quantity}
+                          min="0"
+                          className="w-16 text-center bg-white border-x border-gray-200 py-2"
+                          readOnly
+                        />
+                        <button
+                          className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                          onClick={() => handleQuantityChange(item.productId._id, 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <button
+                        className="ml-4 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        onClick={() => handleRemoveItem(item?.productId._id)}
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              )}
+              </div>
+            </div>
+          ) : null
+        )}
+      </div>
+
+      {cart?.products?.length > 0 && (
+        <>
+          <div className="my-8 border-t border-gray-200"></div>
+          
+          <div className="bg-gradient-to-r to-teal-300 from-blue-400 rounded-xl shadow-lg p-6 text-white">
+            <div className="flex justify-between items-center">
+              <h5 className="text-xl font-semibold">Tổng tiền:</h5>
+              <h5 className="text-2xl font-bold">
+                {totalCost.toLocaleString()} VND
+              </h5>
             </div>
           </div>
-        ) : null
+        </>
       )}
 
-      <hr className="my-6 border-blue-600" />
-      <div>
-        <div className="flex justify-between p-3 text-white rounded-md bg-gradient-to-tl from-lime-200 via-sky-500 to-[#b9f372] m-2">
-          <h5 className="font-semibold">Giảm giá:</h5>
-          <h5 className="font-semibold">
-            {discountAmount.toLocaleString()} VND
-          </h5>
+      {(!cart?.products || cart.products.length === 0) && (
+        <div className="text-center py-12 text-gray-500">
+          Giỏ hàng của bạn đang trống
         </div>
-        <div className="flex justify-between p-3 text-white rounded-md bg-gradient-to-tl from-lime-200 via-sky-500 to-violet-500 m-2">
-          <h5 className="font-semibold">Tổng tiền:</h5>
-          <h5 className="font-semibold">{totalCost.toLocaleString()} VND</h5>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -64,10 +64,10 @@ const PaymentConfirmation = () => {
       console.log(response.data);
 
       if (response.data && response.data.order_url) {
-        console.log("Order URL:", response.data.order_url); 
+        console.log("Order URL:", response.data.order_url);
         window.location.href = response.data.order_url;
       } else {
-        window.location.href = response.data; 
+        window.location.href = response.data;
       }
     } catch (error) {
       console.error("Lỗi thanh toán ví điện tử:", error);
@@ -96,10 +96,10 @@ const PaymentConfirmation = () => {
       <div className="mb-6">
         <h4 className="text-xl font-semibold">Giỏ hàng</h4>
         {cart.products.map((item) => (
-          <div key={item.productId._id} className="flex justify-between mb-4">
-            <span>{item.productId?.productName}</span>
+          <div key={item.productId?._id} className="flex justify-between mb-4">
+            <span>{item?.productId?.productName}</span>
             <span>
-              {item.quantity} x {item.productId.price.toLocaleString()} VND
+              {item.quantity} x {item.productId?.price.toLocaleString()} VND
             </span>
           </div>
         ))}
