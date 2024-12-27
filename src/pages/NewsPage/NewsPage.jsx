@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import SelectedPost from './SelectedPost'; // Import SelectedPost
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import SelectedPost from "./SelectedPost"; // Import SelectedPost
 
 const NewsPage = () => {
   const [news, setNews] = useState([]);
@@ -11,7 +11,7 @@ const NewsPage = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get("/post/viewpost");
+        const response = await axios.get("/post/view");
         setNews(response.data);
       } catch (err) {
         setError("Failed to fetch news");
@@ -28,17 +28,25 @@ const NewsPage = () => {
   };
 
   if (loading) return <div className="text-center mt-4">Loading...</div>;
-  if (error) return <div className="text-red-600 text-center mt-4">{error}</div>;
+  if (error)
+    return <div className="text-red-600 text-center mt-4">{error}</div>;
 
   return (
     <div className=" bg-gray-50 min-h-screen max-w-7xl m-auto">
       {selectedPost ? (
-        <SelectedPost selectedPost={selectedPost} setSelectedPost={setSelectedPost} /> // Hiển thị bài viết đã chọn
+        <SelectedPost
+          selectedPost={selectedPost}
+          setSelectedPost={setSelectedPost}
+        /> // Hiển thị bài viết đã chọn
       ) : (
         <>
           <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-8">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-4">User Posts</h2>
-            <p className="text-lg text-gray-500 mb-4">Explore recent posts by users.</p>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+              User Posts
+            </h2>
+            <p className="text-lg text-gray-500 mb-4">
+              Explore recent posts by users.
+            </p>
           </div>
 
           <div className="grid grid-cols-3 gap-6">
@@ -50,15 +58,21 @@ const NewsPage = () => {
               >
                 {post.images && (
                   <img
-                    src={Array.isArray(post.images) ? post.images[0] : post.images}
+                    src={
+                      Array.isArray(post.images) ? post.images[0] : post.images
+                    }
                     alt={post.title}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />
                 )}
-                <h3 className="text-xl font-semibold text-gray-800">{post.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {post.title}
+                </h3>
                 <p className="text-gray-600">
                   {truncateText(post.description)}
-                  {post.description.length > 100 && <span className="text-blue-600"> Read More</span>}
+                  {post.description.length > 100 && (
+                    <span className="text-blue-600"> Read More</span>
+                  )}
                 </p>
               </div>
             ))}

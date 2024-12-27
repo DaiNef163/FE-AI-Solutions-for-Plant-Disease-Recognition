@@ -67,13 +67,15 @@ function App() {
           <Route path="/editpost/:postId" element={<EditPost />} />
           <Route path="/profile/edit" element={<EditProfile />} />
           <Route path="/crop" element={<CropsTable />} />
-          <Route path="/cropdetail/:cropId" element={<CropDetails />} />
+          <Route path="/cropdetail/:cropId" element={<CropDetails />} />{" "}
           <Route path="/createillness" element={<CreateIllnessPage />} />
-          <Route path="/payment-confirmation" element={<PaymentConfirmation />} />
+          <Route
+            path="/payment-confirmation"
+            element={<PaymentConfirmation />}
+          />
           <Route path="/maganeUser" element={<MaganeUser />} />
           <Route path="/maganeTreament" element={<ManageTreatment />} />
           <Route path="/HistoryOrder" element={<HistoryOrder />} />
-
         </Route>
       </Routes>
     </UserContextProvider>

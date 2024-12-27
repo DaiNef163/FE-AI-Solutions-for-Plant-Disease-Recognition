@@ -61,7 +61,7 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="bg-backgroundPageGradient min-h-screen">
+    <div className="bg-customgradient min-h-screen">
       <div>
         <main className="m-3 rounded-md mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-white">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5">

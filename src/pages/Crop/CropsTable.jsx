@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, message } from "antd"; // Đã thêm message từ Ant Design để hiển thị thông báo
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import axios from "axios";
 
@@ -10,14 +10,25 @@ const CropsPage = () => {
   useEffect(() => {
     axios
       .get("/crop")
-      .then((response) => setCrops(response.data))
-      .catch((error) => console.error("Error fetching crops:", error));
+      .then((response) => {
+        if (response.data.length === 0) {
+          message.warning("Không có cây trồng nào.");
+        } else {
+          setCrops(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching crops:", error);
+        message.error("Lỗi khi lấy dữ liệu cây trồng.");
+      });
   }, []);
+
   const statusMapping = {
     healthy: "Cây trồng khỏe mạnh",
     sick: "Cây đang bị bệnh",
     recovered: "Cây đã khỏi bệnh",
   };
+
   const columns = [
     {
       title: "Tên cây trồng",
@@ -46,12 +57,19 @@ const CropsPage = () => {
       key: "illnessHistory",
       render: (_, record) => (
         <ul>
-          {record.illnessHistory.map((history, index) => (
-            <li key={index}>
-              <strong>{history.diseaseName}</strong> -{" "}
-              {new Date(history.sickDay).toLocaleDateString()}
-            </li>
-          ))}
+          {Array.isArray(record.illnessHistory) &&
+          record.illnessHistory.length > 0 ? (
+            record.illnessHistory.map((history, index) => (
+              <li key={index}>
+                <strong>{history.diseaseName}</strong>
+                {history.diseaseName === "Không có"
+                  ? "" // Nếu là "Không có", không hiển thị ngày
+                  : ` - ${new Date(history.sickDay).toLocaleDateString()}`}
+              </li>
+            ))
+          ) : (
+            <li>Không có lịch sử bệnh</li>
+          )}
         </ul>
       ),
     },
@@ -61,7 +79,10 @@ const CropsPage = () => {
       render: (_, record) => (
         <span>
           <a
-            onClick={() => navigate(`/cropdetail/${record._id}`)} // Điều hướng khi click
+            onClick={() => {
+              console.log(record._id); // Log ID để kiểm tra
+              navigate(`/cropdetail/${record._id}`);
+            }} // Điều hướng khi click
             style={{ color: "blue", cursor: "pointer" }}
           >
             Xem chi tiết

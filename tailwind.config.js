@@ -11,11 +11,12 @@ export default {
         backgroundPageGradient:
           "linear-gradient(to right, rgba(81, 228, 206, 0.7) 5%, rgba(183, 244, 235, 0.7) 60%)",
         backgroundHeader: "linear-gradient(to right, #51E4CE 10%, #B7F4EB 75%)",
+        customgradient:
+          "linear-gradient(180deg, rgba(220, 252, 231, 0.5) 0%, rgba(219, 234, 254, 0.5) 100%)",
       },
       backgroundPageProduct:
         "linear-gradient(to right, #2DD4BF 5%, #53E5CF 60%, #ffffff 95%)",
     },
   },
   plugins: [require("daisyui"), require("tailwindcss-animated")],
-  
 };

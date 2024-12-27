@@ -3,7 +3,7 @@ import { BsBag } from "react-icons/bs";
 import { UserContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidLeaf } from "react-icons/bi";
-import { Dropdown, Space } from "antd";
+import { Button, Dropdown, message, Space } from "antd";
 
 const Header = () => {
   const { user, isAuthenticated, setUser, setIsAuthenticated } =
@@ -22,7 +22,15 @@ const Header = () => {
     window.location.reload();
     window.location.href = "/";
   };
-
+  const handleCropManagementClick = (event) => {
+    if (!localStorage.getItem("tokenUser")) {
+      event.preventDefault(); // Prevent navigation
+      navigate("/login");
+      message.warning("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
+      return;
+    }
+  };
+  
   const getMenuItems = () => {
     const items = [];
 
@@ -126,10 +134,15 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="/crop" className="text-lg font-medium text-white">
+              <Link
+                onClick={handleCropManagementClick  }
+                to="/crop"
+                className="text-lg font-medium text-white"
+              >
                 Quản lí cây trồng
               </Link>
             </li>
+
             <li>
               <Link to="/news" className="text-lg font-medium text-white">
                 Tin tức
