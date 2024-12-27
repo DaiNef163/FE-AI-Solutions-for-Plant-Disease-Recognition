@@ -20,9 +20,10 @@ function ProductDetail() {
   }, [productId]);
 
   const addToCartHandler = () => {
-    const token = localStorage.getItem("tokenUser");
+    const token = localStorage.getItem("tokenUser"); // Kiểm tra token người dùng
     if (!token) {
-      alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+      message.warning("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng."); // Thông báo nếu chưa đăng nhập
+      navigate("/login"); // Điều hướng đến trang đăng nhập
       return;
     }
 
@@ -34,15 +35,15 @@ function ProductDetail() {
           quantity: 1,
         },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` }, // Thêm token vào headers
         }
       )
       .then((response) => {
-        message.success("Sản phẩm đã được thêm vào giỏ hàng!");
+        message.success("Sản phẩm đã được thêm vào giỏ hàng!"); // Thông báo thành công
       })
       .catch((error) => {
         console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
-        alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+        message.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng."); // Thông báo lỗi
       });
   };
 
@@ -52,8 +53,7 @@ function ProductDetail() {
 
   return (
     <div className="bg-backgroundPageGradient py-8">
-      <div className="mx-auto max-w-7xl px-4 ">
-        {/* <div><h1 className="text-4xl font-bold text-gray-800 flex text-center justify-center p-3 mb-6">Chi tiết sản phẩm</h1></div> */}
+      <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-wrap justify-center items-start gap-12">
           {/* Image Section */}
           <div className="flex-1 w-full md:w-1/2">
@@ -74,7 +74,7 @@ function ProductDetail() {
               Giá: {product.price} VND
             </p>
             <p className="text-xl font-semibold mt-2 bg-gradient-to-r from-[#364359] to-[#076f9f] inline-block text-transparent bg-clip-text">
-              Tên lá: {product.nameLeaf}  
+              Tên lá: {product.nameLeaf}
             </p>
             <p className="text-xl font-semibold text-green-600 mt-2">
               Giảm giá: {product.discount}%
@@ -86,7 +86,7 @@ function ProductDetail() {
                 product.images.map((image, index) => (
                   <div
                     key={index}
-                    className="  w-32 h-32 rounded-lg overflow-hidden shadow-md cursor-pointer"
+                    className="w-32 h-32 rounded-lg overflow-hidden shadow-md cursor-pointer"
                     onClick={() => setMainImage(image)} // Đổi ảnh chính khi click
                   >
                     <img
@@ -100,7 +100,7 @@ function ProductDetail() {
 
             <button
               onClick={addToCartHandler}
-              className=" mt-12 ml-20 w-full sm:w-auto px-6 py-3  text-white font-semibold rounded-lg shadow-md transition-colors animate-bounce animate-infinite hover:from-[#A1C4FD] hover:to-[#ecc062] bg-gradient-to-r from-[#b2c8ed] to-[#E2D1C3]"
+              className="mt-12 ml-20 w-full sm:w-auto px-6 py-3 text-white font-semibold rounded-lg shadow-md transition-colors animate-bounce animate-infinite hover:from-[#A1C4FD] hover:to-[#ecc062] bg-gradient-to-r from-[#b2c8ed] to-[#E2D1C3]"
             >
               Thêm vào giỏ hàng
             </button>

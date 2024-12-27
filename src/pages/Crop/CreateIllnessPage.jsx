@@ -14,9 +14,18 @@ const CreateIllnessPage = () => {
 
   const navigate = useNavigate(); // Hook để điều hướng
 
+  // Kiểm tra tokenUser từ localStorage
+  const tokenUser = localStorage.getItem("tokenUser");
+
   const handleSubmit = async () => {
+    if (!tokenUser) {
+      message.warning("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
+      navigate("/login"); // Điều hướng đến trang đăng nhập
+      return;
+    }
+
     if (!plantName || !quantity || !diseaseName || !sickDay || !plantDate) {
-      message.error("Vui lòng điền đầy đủ thông tin. ");
+      message.error("Vui lòng điền đầy đủ thông tin.");
       return;
     }
 
@@ -32,7 +41,7 @@ const CreateIllnessPage = () => {
       });
 
       message.success("Cây trồng và bệnh đã được thêm thành công!");
-      navigate("/crop"); // Điều hướng về trang danh sách cây trồng sau khi thêm
+      navigate("/crop");
     } catch (error) {
       message.error("Đã có lỗi xảy ra khi thêm cây trồng!");
       console.error(error);
@@ -40,9 +49,14 @@ const CreateIllnessPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: 20 }}>
-      <h2>Thêm cây trồng và bệnh</h2>
-      <Form layout="vertical">
+    <div className="border border-sky-500">
+      <h2 className="text-3xl font-medium my-3 text-center">
+        Thêm cây trồng và bệnh
+      </h2>
+      <Form
+        style={{ border: "solid", width: 600, margin: "0 auto", padding: 20 }}
+        layout="vertical"
+      >
         <Form.Item label="Tên cây trồng">
           <Input
             value={plantName}

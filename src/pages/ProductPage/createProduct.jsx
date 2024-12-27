@@ -88,7 +88,6 @@ function CreateProduct() {
     formData.append("tokenUser", localStorage.tokenUser);
     console.log("...", localStorage.tokenUser);
 
-    // Đảm bảo image là mảng và xử lý từng file
     if (Array.isArray(image) && image.length > 0) {
       image.forEach((file) => {
         formData.append("images", file);
@@ -124,19 +123,15 @@ function CreateProduct() {
   return (
     <div>
       {isAuthenticated && (user?.role === "admin" || user?.role === "staff") ? (
-        <div>
+        <div className="w-3/5 m-auto">
           <h5 className="text-3xl font-bold text-center bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-wrap bg-clip-text text-transparent ">
             Thông tin sản phẩm
           </h5>
-          <Row
-            justify={"space-between"}
-            style={{ marginTop: "30px", marginLeft: "12rem" }}
-          >
+          <Row justify={"space-between"} style={{}}>
             <Col className="" xs={24} md={16} lg={8}>
               <fieldset
                 style={{
                   padding: "15px",
-                  margin: "5px",
                   border: "1px solid #ccc",
                   borderRadius: "5px",
                   width: "1080px",

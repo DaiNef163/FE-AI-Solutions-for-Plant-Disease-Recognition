@@ -3,7 +3,7 @@ import { Button, Form, Input, Upload, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 
-function CreateProduct() {
+function CreateNews() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -39,7 +39,7 @@ function CreateProduct() {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("images", image);
+    formData.append("images", image); // Thêm ảnh vào formData
 
     const token = localStorage.getItem("tokenUser");
 
@@ -66,8 +66,10 @@ function CreateProduct() {
   };
 
   return (
-    <div>
-      <h5 className="text-3xl font-bold text-center mb-4">Thông tin bài viết</h5>
+    <div >
+      <h5 className="text-3xl font-bold text-center mb-4">
+        Thông tin bài viết
+      </h5>
       <Form
         name="basic"
         onFinish={handleSubmit}
@@ -79,7 +81,9 @@ function CreateProduct() {
           label="Tiêu đề bài viết"
           name="title"
           value={title}
-          rules={[{ required: true, message: "Vui lòng nhập tiêu đề bài viết" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập tiêu đề bài viết" },
+          ]}
         >
           <Input onChange={(e) => setTitle(e.target.value)} />
         </Form.Item>
@@ -87,7 +91,9 @@ function CreateProduct() {
         <Form.Item
           label="Nội dung bài viết"
           name="description"
-          rules={[{ required: true, message: "Vui lòng nhập nôi dung bài viết" }]}
+          rules={[
+            { required: true, message: "Vui lòng nhập nội dung bài viết" },
+          ]}
         >
           <Input.TextArea
             rows={4}
@@ -104,9 +110,10 @@ function CreateProduct() {
             listType="picture-card"
             className="p-2 border-2 border-dashed"
             beforeUpload={(file) => {
-              setImage(file);
+              setImage(file); // Chỉ chọn một ảnh duy nhất
               return false;
             }}
+            fileList={image ? [image] : []} // Hiển thị ảnh đã chọn
           >
             <button
               className="bg-transparent border-0 hover:bg-gray-200 p-2"
@@ -128,4 +135,4 @@ function CreateProduct() {
   );
 }
 
-export default CreateProduct;
+export default CreateNews;

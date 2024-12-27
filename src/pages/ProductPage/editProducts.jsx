@@ -76,17 +76,11 @@ const EditProduct = () => {
     payload.append("description", formData.description);
     payload.append("nameLeaf", formData.nameLeaf);
 
-    // Check if there are any files before appending them to FormData
-    if (image.length > 0) {
+    if (Array.isArray(image) && image.length > 0) {
       image.forEach((file) => {
-        payload.append("images", file.originFileObj); // Use originFileObj for the actual file
+        payload.append("images", file);
       });
-    } else {
-      message.error("Vui lòng tải lên ít nhất một ảnh.");
-      return; // If no images, return to prevent the request
     }
-
-    // Make the PUT request to update the product
     axios
       .put(`/product/editproduct/${productId}`, payload)
       .then(() => {

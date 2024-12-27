@@ -49,7 +49,6 @@ const loginApi = async (email, password) => {
 const storedUser = JSON.parse(localStorage.getItem("user"));
 console.log(storedUser);
 
-
 const forgotPassword = () => {
   const URL_API = "/password/forgot";
   const data = {
@@ -63,7 +62,8 @@ const createUProductAPi = async (
   description,
   discount,
   images,
-  nameLeaf,tokenUser
+  nameLeaf,
+  tokenUser
 ) => {
   try {
     const formData = new FormData();

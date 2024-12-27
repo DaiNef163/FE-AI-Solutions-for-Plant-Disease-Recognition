@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // Import useParams
-import { Table, Button, Form, Input, DatePicker, message, Spin, Select } from "antd";
+import { Link, useParams } from "react-router-dom"; // Import useParams
+import {
+  Table,
+  Button,
+  Form,
+  Input,
+  DatePicker,
+  message,
+  Spin,
+  Select,
+} from "antd";
 import axios from "axios";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const CropDetails = () => {
   const { cropId } = useParams(); // Lấy cropId từ URL
@@ -38,7 +48,7 @@ const CropDetails = () => {
             sickDay: values.sickDay.format("YYYY-MM-DD"), // Định dạng ngày
           },
         ],
-        status: values.status,  // Gửi status cùng với illnessHistory
+        status: values.status, // Gửi status cùng với illnessHistory
       };
 
       // Gửi yêu cầu PATCH để cập nhật bệnh và status vào cây trồng
@@ -47,7 +57,10 @@ const CropDetails = () => {
       // Cập nhật lại lịch sử bệnh và status trong state
       setIllnessHistory((prevIllnessHistory) => [
         ...prevIllnessHistory,
-        { diseaseName: values.diseaseName, sickDay: values.sickDay.format("YYYY-MM-DD") },
+        {
+          diseaseName: values.diseaseName,
+          sickDay: values.sickDay.format("YYYY-MM-DD"),
+        },
       ]);
       setCrop((prevCrop) => ({
         ...prevCrop,
@@ -62,9 +75,9 @@ const CropDetails = () => {
 
   // Cột cho bảng lịch sử bệnh
   const illnessColumns = [
-    { title: "Disease Name", dataIndex: "diseaseName", key: "diseaseName" },
+    { title: "Tên bệnh", dataIndex: "diseaseName", key: "diseaseName" },
     {
-      title: "Sick Day",
+      title: "Ngày bị bênh",
       dataIndex: "sickDay",
       key: "sickDay",
       render: (text) => new Date(text).toLocaleDateString(),
@@ -75,31 +88,57 @@ const CropDetails = () => {
   if (loading) return <Spin tip="Loading crop details..." />;
 
   return (
-    <div>
-      <h2>{crop.name} - {crop.type}</h2>
+    <div className=" w-2/5 m-auto ">
+      <div className="m-5">
+        <Button
+          href="/crop"
+          icon={<ArrowLeftOutlined />}
+          className="w-max flex items-center gap-2 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Quay lại
+        </Button>
+      </div>
       {/* Bảng lịch sử bệnh */}
-      <Table dataSource={illnessHistory} columns={illnessColumns} rowKey="_id" />
-      
+      <Table
+        dataSource={illnessHistory}
+        columns={illnessColumns}
+        rowKey="_id"
+      />
+
       {/* Form thêm bệnh mới */}
       <Form onFinish={handleAddIllness}>
-        <Form.Item name="diseaseName" label="Disease Name" rules={[{ required: true, message: "Enter disease name" }]}>
+        <Form.Item
+          name="diseaseName"
+          label="Tên bệnh"
+          rules={[{ required: true, message: "Nhập tên bệnh" }]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item name="sickDay" label="Sick Day" rules={[{ required: true, message: "Enter sick day" }]}>
+        <Form.Item
+          name="sickDay"
+          label="Ngày bị bệnh"
+          rules={[{ required: true, message: "Nhập ngày bị bệnh" }]}
+        >
           <DatePicker />
         </Form.Item>
 
-        <Form.Item name="status" label="Status" rules={[{ required: true, message: "Select status" }]}>
+        <Form.Item
+          name="status"
+          label="Trạng thái"
+          rules={[{ required: true, message: "Chọn trạng thái cây trồng" }]}
+        >
           <Select>
-            <Select.Option value="healthy">Healthy</Select.Option>
-            <Select.Option value="sick">Sick</Select.Option>
-            <Select.Option value="recovered">Recovered</Select.Option>
+            <Select.Option value="healthy">Cây trồng khỏe mạnh.</Select.Option>
+            <Select.Option value="sick">Cây đang bị bệnh.</Select.Option>
+            <Select.Option value="recovered">Cây đã khỏi bệnh.</Select.Option>
           </Select>
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">Add Illness</Button>
+          <Button type="primary" htmlType="submit">
+            Thêm bệnh
+          </Button>
         </Form.Item>
       </Form>
     </div>

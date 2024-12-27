@@ -10,22 +10,23 @@ const CartPage = () => {
   const [userInfo, setUserInfo] = useState({});
   const [totalCost, setTotalCost] = useState(0);
   const [discountAmount, setDiscountAmount] = useState(0);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("tokenUser");
     if (token) {
+      // Lấy giỏ hàng
       axios
         .get("/carts/viewcart", {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           setCart(response.data);
-          calculateTotalCost(response.data);
+          calculateTotalCost(response.data); // Tính tổng chi phí
         })
         .catch((error) => console.error("Error fetching cart:", error));
 
+      // Lấy thông tin người dùng
       axios
         .get("/user/profile", {
           headers: { Authorization: `Bearer ${token}` },
@@ -73,7 +74,7 @@ const CartPage = () => {
         }
       );
       setCart(response.data);
-      calculateTotalCost(response.data);
+      calculateTotalCost(response.data); // Tính lại tổng chi phí
     } catch (error) {
       console.error("Lỗi khi cập nhật giỏ hàng:", error);
       alert("Không thể cập nhật số lượng sản phẩm.");
@@ -92,8 +93,8 @@ const CartPage = () => {
       }
       return item;
     });
-    setCart(updatedCart);
-    calculateTotalCost(updatedCart);
+    setCart(updatedCart); // Cập nhật lại giỏ hàng trên giao diện
+    calculateTotalCost(updatedCart); // Cập nhật lại tổng chi phí
   };
 
   const handleCheckout = (userInfo) => {
@@ -114,6 +115,18 @@ const CartPage = () => {
     });
   };
 
+
+  const handleRemoveItem = async (productId) => {
+    try {
+      const response = await axios.delete(`/carts/remove-item/${productId}`);
+      setCart(response.data.cart); // Cập nhật giỏ hàng sau khi xóa sản phẩm
+    } catch (error) {
+      console.error('Lỗi khi xóa sản phẩm:', error);
+    }
+  };
+  
+  
+
   return (
     <div className="w-4/5 mx-auto p-4">
       {cart ? (
@@ -122,6 +135,7 @@ const CartPage = () => {
             <CartItems
               cart={cart}
               handleQuantityChange={handleQuantityChange}
+              handleRemoveItem={handleRemoveItem}
               discountAmount={discountAmount}
               totalCost={totalCost}
             />
