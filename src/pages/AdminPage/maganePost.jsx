@@ -10,6 +10,7 @@ const MaganePost = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
 
+  // Lấy danh sách bài viết
   useEffect(() => {
     axios
       .get("/post/viewpost")
@@ -17,6 +18,22 @@ const MaganePost = () => {
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
+  // Hàm xử lý xóa bài viết
+  const handleDelete = (id) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
+      axios
+        .delete(`post/delete/${id}`)
+        .then((response) => {
+          alert(response.data.message);
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product._id !== id)
+          );
+        })
+        .catch((error) => console.error("Error deleting product:", error));
+    }
+  };
+
+  // Hàm cắt ngắn văn bản
   const truncateText = (text, maxLength = 50) => {
     if (text?.length > maxLength) {
       return text.slice(0, maxLength) + "...";
@@ -24,16 +41,14 @@ const MaganePost = () => {
     return text;
   };
 
+  // Cột hiển thị trong bảng
   const columns = [
     {
       title: "Tên bài viết",
       dataIndex: "title",
       key: "title",
       render: (text) => (
-        <Paragraph
-          ellipsis={{ rows: 2 }}
-          style={{ maxWidth: 200, margin: 0 }}
-        >
+        <Paragraph ellipsis={{ rows: 2 }} style={{ maxWidth: 200, margin: 0 }}>
           {text}
         </Paragraph>
       ),
@@ -55,10 +70,7 @@ const MaganePost = () => {
       dataIndex: "description",
       key: "description",
       render: (text) => (
-        <Paragraph
-          ellipsis={{ rows: 2 }}
-          style={{ maxWidth: 300, margin: 0 }}
-        >
+        <Paragraph ellipsis={{ rows: 2 }} style={{ maxWidth: 300, margin: 0 }}>
           {text}
         </Paragraph>
       ),
@@ -69,7 +81,7 @@ const MaganePost = () => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => navigate(`/editpost/${record._id}`)}>Sửa</a>
-          <a onClick={() => navigate(`/deletepost/${record._id}`)}>Xóa</a>
+          <a onClick={() => handleDelete(record._id)}>Xóa</a>
         </Space>
       ),
     },

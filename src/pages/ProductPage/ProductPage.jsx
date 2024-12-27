@@ -154,7 +154,7 @@ export default function ProductPage() {
                           <img
                             src={product.images?.[0] || "default-image.jpg"}
                             alt={product.productName}
-                            className="h-48 w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                            className="h-48 w-full  object-center  bg-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
                         <div className="p-4 space-y-2">
