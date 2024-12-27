@@ -12,7 +12,7 @@ const MaganePost = () => {
 
   useEffect(() => {
     axios
-      .get("/post/viewpostUser")
+      .get("/post/viewpost")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
