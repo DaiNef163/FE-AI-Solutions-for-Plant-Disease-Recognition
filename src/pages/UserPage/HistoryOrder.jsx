@@ -36,7 +36,7 @@ function HistoryOrder() {
         products.map((product, index) => (
           <div key={index}>
             <p>
-              {product.productId}: {product.quantity} x ${product.price}
+              {product.productId.name}: {product.quantity} x ${product.price}
             </p>
           </div>
         )),
@@ -45,7 +45,7 @@ function HistoryOrder() {
       title: "Tổng chi phí",
       dataIndex: "totalCost",
       key: "totalCost",
-      render: (cost) => `$${cost.toFixed(2)}`,
+      render: (cost) => `${cost} VND`,
     },
     {
       title: "Loại thanh toán",

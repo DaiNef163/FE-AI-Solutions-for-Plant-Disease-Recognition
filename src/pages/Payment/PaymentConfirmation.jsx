@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { message, notification } from "antd";
 
 const PaymentConfirmation = () => {
   const location = useLocation();
@@ -42,12 +43,13 @@ const PaymentConfirmation = () => {
           navigate("/order-success");
         } else {
           // Thanh toán không thành công
-          alert("Thanh toán khi nhận hàng thành công!");
+          alert("Thanh toán khi nhận hàng không thành công!");
           navigate("/shoppingcart");
         }
       } catch (error) {
         console.error("Lỗi thanh toán tiền mặt:", error);
         alert("Đã xảy ra lỗi trong quá trình thanh toán tiền mặt.");
+        navigate("/shoppingcart"); // Quay lại trang giỏ hàng khi có lỗi
       }
     } else {
       // Handle online payment
@@ -71,9 +73,14 @@ const PaymentConfirmation = () => {
       }
     } catch (error) {
       console.error("Lỗi thanh toán ví điện tử:", error);
-      alert("Đã xảy ra lỗi trong quá trình thanh toán ví điện tử.");
+      notification.warning({
+        message: "Số lượng không đủ",
+        description: "Vui lòng chỉnh sửa số lượng sản phẩm.",
+      });
+      navigate("/shoppingcart"); // Quay lại trang giỏ hàng khi có lỗi
     }
   };
+
   console.log("Total cost in frontend: ", cart.totalCost);
 
   // Clear cart after successful payment
@@ -84,6 +91,11 @@ const PaymentConfirmation = () => {
   // Save order history after successful payment
   const saveOrderHistory = () => {
     console.log("Lịch sử mua hàng đã được lưu.");
+  };
+
+  // Handle "Back to shopping cart"
+  const handleBackToCart = () => {
+    navigate("/shoppingcart");
   };
 
   return (
@@ -165,6 +177,16 @@ const PaymentConfirmation = () => {
           </div>
         </div>
       )}
+
+      {/* Back to cart button */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handleBackToCart}
+          className="px-10 py-3 rounded-lg bg-gray-500 text-white font-semibold"
+        >
+          Quay lại giỏ hàng
+        </button>
+      </div>
     </div>
   );
 };
