@@ -134,7 +134,7 @@ const Register = () => {
                 <Select className="hover:border-teal-500">
                   <Select.Option value="customer">Khách hàng</Select.Option>
                   <Select.Option value="staff">Nhân viên</Select.Option>
-                  <Select.Option value="admin">Quản trị viên</Select.Option>
+                  {/* <Select.Option value="admin">Quản trị viên</Select.Option> */}
                 </Select>
               </Form.Item>
 
