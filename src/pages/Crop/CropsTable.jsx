@@ -99,7 +99,7 @@ const CropsPage = () => {
         onClick={() => navigate("/createillness")}
         style={{ marginBottom: 16 }}
       >
-        Thêm bệnh
+        Thêm cây
       </Button>
       <Table dataSource={crops} columns={columns} rowKey="_id" />
     </div>
