@@ -78,7 +78,7 @@ const DiseaseRecognition = () => {
 
                 <div className="flex flex-col items-center gap-4 mt-4">
                     <button
-                        className="bg-blue-500 hover:bg-blue-600 text-black py-2 px-4 rounded-lg text-2xl w-full font-semibold text-center"
+                        className="bg-gradient-to-l from-teal-400 to-blue-500 hover:from-teal-500 hover:to-green-300 text-black py-2 px-4 rounded-lg text-2xl w-full font-semibold text-center"
                         onClick={handlePredict}
                     >
                         Chẩn đoán

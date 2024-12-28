@@ -22,6 +22,7 @@ const EditProduct = () => {
     price: "",
     discount: "",
     description: "",
+    quantity: "",
     nameLeaf: "",
   });
   const [image, setImage] = useState([]);
@@ -50,6 +51,7 @@ const EditProduct = () => {
             productName: productData.productName || "",
             price: productData.price || 0,
             discount: productData.discount || 0,
+            quantity: productData.quantity || 0,
             description: productData.description || "",
             nameLeaf: productData.nameLeaf || "",
           });
@@ -74,6 +76,7 @@ const EditProduct = () => {
     payload.append("price", formData.price);
     payload.append("discount", formData.discount);
     payload.append("description", formData.description);
+    payload.append("quantity", formData.quantity);
     payload.append("nameLeaf", formData.nameLeaf);
 
     if (Array.isArray(image) && image.length > 0) {
@@ -126,7 +129,7 @@ const EditProduct = () => {
 
         <Form.Item
           placeholder={formData.discount}
-          label="Giảm giá (Nếu có)"
+          label="Giảm giá"
           name="discount"
           className="mb-4"
         >
@@ -137,20 +140,36 @@ const EditProduct = () => {
             className="p-3 border rounded-md w-full"
           />
         </Form.Item>
+        <Form.Item
+          placeholder={formData.quantity}
+          label="Số lượng"
+          name="quantity"
+          className="mb-4"
+        >
+          <InputNumber
+            placeholder={formData.quantity}
+            value={formData.quantity}
+            onChange={(value) => setFormData({ ...formData, quantity: value })}
+            className="p-3 border rounded-md w-full"
+          />
+        </Form.Item>
 
         <Form.Item label="Mô tả sản phẩm" name="description" className="mb-4">
-  <TextArea
-    placeholder="Mô tả sản phẩm"
-    value={formData.description}
-    rows={4}
-    onChange={(e) =>
-      setFormData({ ...formData, description: e.target.value })
-    }
-    className="p-3 border rounded-md w-full overflow-hidden text-ellipsis"
-    style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}
-  />
-</Form.Item>
-
+          <TextArea
+            placeholder="Mô tả sản phẩm"
+            value={formData.description}
+            rows={4}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            className="p-3 border rounded-md w-full overflow-hidden text-ellipsis"
+            style={{
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          />
+        </Form.Item>
 
         <Form.Item label="Loại lá" name="nameLeaf" className="mb-4">
           <Select

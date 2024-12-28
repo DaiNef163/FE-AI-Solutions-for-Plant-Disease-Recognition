@@ -1,5 +1,5 @@
 import React from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus, Minus } from "lucide-react";
 
 const CartItems = ({
   cart,
@@ -7,13 +7,18 @@ const CartItems = ({
   handleQuantityChange,
   totalCost,
 }) => {
-  const handleInputChange = (productId, value) => {
-    const newValue = Math.max(0, parseInt(value) || 0);
-    const currentQuantity = cart.products.find(
-      item => item.productId._id === productId
-    )?.quantity || 0;
-    const change = newValue - currentQuantity;
-    handleQuantityChange(productId, change);
+  // Sửa lại hàm handleInputChange để xử lý trực tiếp giá trị mới
+  const handleInputChange = (productId, e) => {
+    const value = e.target.value;
+    // Chỉ chấp nhận số nguyên dương hoặc rỗng
+    if (value === '' || /^\d+$/.test(value)) {
+      const newValue = value === '' ? 0 : parseInt(value);
+      const currentQuantity = cart.products.find(
+        item => item.productId._id === productId
+      )?.quantity || 0;
+      const change = newValue - currentQuantity;
+      handleQuantityChange(productId, change);
+    }
   };
 
   return (
@@ -51,19 +56,32 @@ const CartItems = ({
                     </p>
 
                     <div className="flex items-center">
-                      <div className="relative flex items-center">
-                        <div className="relative group">
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-teal-400 rounded-lg blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                      <div className="relative group">
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-teal-400 rounded-lg blur opacity-30 group-hover:opacity-50 transition duration-300"></div>
+                        <div className="relative flex items-center bg-white rounded-lg overflow-hidden">
+                          <button
+                            className="px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200
+                            border-r border-gray-200 focus:outline-none focus:bg-gray-50"
+                            onClick={() => handleQuantityChange(item.productId._id, -1)}
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          
                           <input
-                            type="number"
-                            value={item?.quantity}
-                            min="0"
-                            onChange={(e) => handleInputChange(item.productId._id, e.target.value)}
-                            className="relative w-20 text-center bg-white border-2 border-transparent rounded-lg py-2 px-2
-                            [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                            focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300
-                            transition-all duration-300 group-hover:shadow-lg"
+                            type="text" // Đổi type thành text để dễ kiểm soát hơn
+                            value={item?.quantity || ''} // Thêm fallback cho giá trị undefined
+                            onChange={(e) => handleInputChange(item.productId._id, e)}
+                            className="w-16 text-center bg-white py-2
+                            focus:outline-none"
                           />
+                          
+                          <button
+                            className="px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors duration-200
+                            border-l border-gray-200 focus:outline-none focus:bg-gray-50"
+                            onClick={() => handleQuantityChange(item.productId._id, 1)}
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
 

@@ -50,6 +50,12 @@ const MaganeProduct = () => {
       ),
     },
     {
+      title: "Số lượng",
+      dataIndex: "quantity",
+      key: "quantity",
+      render: (quantity) => `${quantity}`,
+    },
+    {
       title: "Giá",
       dataIndex: "price",
       key: "price",
