@@ -47,10 +47,23 @@ This solution is aimed at empowering farmers and streamlining agricultural produ
 
 ## 💻 How to Run
 
-1. Clone the repository: git clone https://github.com/DaiNef163/FE-AI-Solutions-for-Plant-DiseaseRecognition.git
-2. Install dependencies: install
-3. Start the development server: npm start
+Follow these steps to set up and run the backend server:
 
+### 1️⃣ Clone the Repository and Navigate
+```bash
+git clone https://github.com/DaiNef163/BE-AI-Solutions-for-Plant-DiseaseRecognition.git
+cd BE-AI-Solutions-for-Plant-DiseaseRecognition
+```
+
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
+3. Start the development server: npm start
+### 3️⃣ Run the Development Server
+Start the server using:
+```bash
+npm start
 ---
 **Thank you for visiting! Feel free to contribute or reach out for collaboration opportunities.**
 
