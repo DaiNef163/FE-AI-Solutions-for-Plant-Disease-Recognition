@@ -21,10 +21,10 @@ This solution is aimed at empowering farmers and streamlining agricultural produ
 
 ## 🔧 Technologies Used
 - **ReactJS**: For building the interactive UI.
-- **TailwindCSS**: For responsive and modern design.
-- **Bootstrap**: To complement the styling and layout design.
 - ![ReactJS](https://img.shields.io/badge/ReactJS-61DAFB?style=for-the-badge&logo=react&logoColor=white)  
+- **TailwindCSS**: For responsive and modern design.
 - ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)  
+- **Bootstrap**: To complement the styling and layout design.
 - ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 
 
@@ -47,9 +47,10 @@ This solution is aimed at empowering farmers and streamlining agricultural produ
 
 ## 💻 How to Run
 
-1. Clone the repository:
-   git clone https://github.com/DaiNef163/FE-AI-Solutions-for-Plant-DiseaseRecognition.git
-2. Install dependencies:
-    npm ínstall
-3. Start the development server:
-    npm start
+1. Clone the repository: git clone https://github.com/DaiNef163/FE-AI-Solutions-for-Plant-DiseaseRecognition.git
+2. Install dependencies: install
+3. Start the development server: npm start
+
+---
+**Thank you for visiting! Feel free to contribute or reach out for collaboration opportunities.**
+
