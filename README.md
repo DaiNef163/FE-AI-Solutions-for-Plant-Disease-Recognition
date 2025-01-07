@@ -59,11 +59,11 @@ cd BE-AI-Solutions-for-Plant-DiseaseRecognition
 ```bash
 npm install
 ```
-3. Start the development server: npm start
 ### 3️⃣ Run the Development Server
-Start the server using:
 ```bash
 npm start
 ---
+
+
 **Thank you for visiting! Feel free to contribute or reach out for collaboration opportunities.**
 
