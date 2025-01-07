@@ -1,4 +1,5 @@
 # AI Plant Disease Recognition Website
+![image](https://github.com/user-attachments/assets/50e7842e-f942-4140-b441-8e6c9434c7dc)
 
 ## 🌱 Description
 This project is an **AI-powered e-commerce website** tailored for the agricultural sector. It features:
@@ -22,6 +23,10 @@ This solution is aimed at empowering farmers and streamlining agricultural produ
 - **ReactJS**: For building the interactive UI.
 - **TailwindCSS**: For responsive and modern design.
 - **Bootstrap**: To complement the styling and layout design.
+- ![ReactJS](https://img.shields.io/badge/ReactJS-61DAFB?style=for-the-badge&logo=react&logoColor=white)  
+- ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)  
+- ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 
 ---
 
@@ -41,9 +46,10 @@ This solution is aimed at empowering farmers and streamlining agricultural produ
 ---
 
 ## 💻 How to Run
+
 1. Clone the repository:
    git clone https://github.com/DaiNef163/FE-AI-Solutions-for-Plant-DiseaseRecognition.git
-2,Install dependencies:
+2. Install dependencies:
     npm ínstall
 3. Start the development server:
     npm start
