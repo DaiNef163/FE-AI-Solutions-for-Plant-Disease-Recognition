@@ -62,8 +62,7 @@ npm install
 ### 3️⃣ Run the Development Server
 ```bash
 npm start
+```
 ---
-
-
 **Thank you for visiting! Feel free to contribute or reach out for collaboration opportunities.**
 
